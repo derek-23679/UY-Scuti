@@ -1,7 +1,7 @@
 # UY-Scuti
-Grupo programación 1
+## Grupo programación 1
 
-Integrantes:
+## Integrantes:
 
 C5G480 - Derek Liang Zheng
 
