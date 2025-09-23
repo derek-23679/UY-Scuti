@@ -1,0 +1,24 @@
+#BlueJ class context
+comment0.target=Ataque
+comment0.text=\r\n\ Este\ es\ el\ equivalente\ a\ un\ ataque\ de\ un\ pokemon\r\n
+comment1.params=nombre\ elemento\ potencia\ ppMax\ precision
+comment1.target=Ataque(java.lang.String,\ Elemento,\ int,\ int,\ int)
+comment2.params=
+comment2.target=java.lang.String\ getNombre()
+comment3.params=
+comment3.target=Elemento\ getElemento()
+comment4.params=
+comment4.target=int\ getPotencia()
+comment5.params=
+comment5.target=int\ getPpMax()
+comment6.params=
+comment6.target=int\ getPpActual()
+comment7.params=
+comment7.target=int\ getPrecision()
+comment8.params=
+comment8.target=void\ usar()
+comment8.text=\r\n\ Resta\ 1\ PP\ al\ ataque\r\n
+comment9.params=
+comment9.target=boolean\ disponible()
+comment9.text=\r\n\ @return\ true\ si\ aun\ quedan\ PP\r\n
+numComments=10

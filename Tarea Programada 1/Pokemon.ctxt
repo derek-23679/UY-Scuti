@@ -1,0 +1,21 @@
+#BlueJ class context
+comment0.target=Pokemon
+comment0.text=\r\n\ Esta\ clase\ representa\ un\ pokemon\ con\ nombre,\ nivel,\ stats,\ elementos\ y\ ataques\r\n
+comment1.params=nombre\ nivel\ stats\ elementos\ ataques
+comment1.target=Pokemon(java.lang.String,\ int,\ Stats,\ java.util.List,\ java.util.List)
+comment2.params=
+comment2.target=java.lang.String\ getNombre()
+comment3.params=
+comment3.target=int\ getNivel()
+comment4.params=
+comment4.target=Stats\ getStats()
+comment5.params=
+comment5.target=java.util.List\ getElementos()
+comment6.params=
+comment6.target=java.util.List\ getAtaques()
+comment7.params=
+comment7.target=boolean\ isVivo()
+comment8.params=
+comment8.target=void\ debilitar()
+comment8.text=\r\n\ Marca\ al\ pokemon\ como\ debilitado\r\n
+numComments=9

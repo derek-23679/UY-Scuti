@@ -1,0 +1,16 @@
+#BlueJ class context
+comment0.target=Stats
+comment0.text=\r\n\ Equivale\ a\ las\ estadisticas\ de\ un\ pokemon\r\n
+comment1.params=hp\ atk\ def\ spd
+comment1.target=Stats(int,\ int,\ int,\ int)
+comment2.params=
+comment2.target=int\ getHp()
+comment3.params=hp
+comment3.target=void\ setHp(int)
+comment4.params=
+comment4.target=int\ getAtk()
+comment5.params=
+comment5.target=int\ getDef()
+comment6.params=
+comment6.target=int\ getSpd()
+numComments=7
