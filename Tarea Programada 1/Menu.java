@@ -5,7 +5,7 @@ public class Menu {
     private String nombre;
     private Pokemon[] pokemones;
     private Pokemon[] pokemonesJugador;
-    private Entrador jugador;
+    private Entrenador jugador;
 
     public Menu() {
         scanner = new Scanner(System.in);
@@ -29,7 +29,7 @@ public class Menu {
 
         // Elegir 3 pokemones
         for (int i = 0; i < 2; i++) {
-            elegirPokemon();
+            elegirPokemones();
         }
 
         jugador = new Entrenador(nombre, true, pokemonesJugador);
@@ -45,12 +45,12 @@ public class Menu {
         // En ese caso, hay que hacer reset de los datos que tomamos ej. La lista de pokemones.
     }
 
-    private Pokemon[] elegirPokemones() {
+    private void elegirPokemones() {
         System.out.println("--------- Elección de pokemones ---------");
 
         // Print de pokemones para elegir
         for (int i = 0; i < pokemones.length - 1; i++) {
-            System.out.print(i + 1 + ") ")
+            System.out.print(i + 1 + ") ");
             pokemonToString(pokemones[i]);
         }
 
@@ -75,7 +75,7 @@ public class Menu {
         Pokemon[] pokemonesTemp = new Pokemon[pokemones.length - 1];
         int contador2 = 0;
 
-        for (int i = 0, int < pokemones.length; i++) {
+        for (int i = 0; i < pokemones.length; i++) {
             if (i != opcion) {
                 pokemonesTemp[contador2] = pokemones[contador2];
                 contador++;
@@ -88,6 +88,6 @@ public class Menu {
 
     private void pokemonToString(Pokemon pokemon) {
         // Para hacer print para la elección del pokemon
-        System.out.printf("%s Lv%d\n", pokemon.getNombre, pokemon.getNivel);
+        System.out.printf("%s Lv%d\n", pokemon.getNombre(), pokemon.getNivel());
     }
 }
