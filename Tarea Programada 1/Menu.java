@@ -123,46 +123,57 @@ public class Menu {
         Ataque ataqueAla = new Ataque("Ataque Ala", volador, 60, 35, 95);
         Ataque picado = new Ataque("Picado", volador, 80, 30, 100);
         Ataque tornado = new Ataque("Tornado", volador, 80, 20, 95);
-        /* Pokémon que se tomarán en cuenta, divididos por elemento
+        /* Pokemones que se tomarán en cuenta, divididos por elemento
          * Se seleccionaron 5 pokémon por cada uno de los 6 elementos, para un total de 30
          * Cada pokémon tiene 3 ataques; 1 ataque básico y 2 ataques relativo a su elemento
         */
         // Fuego
-        Pokemon charmander = new Pokemon("Charmander", 5, statsCharmander, List.of(fuego), List.of(placaje, golpeCuerpo, ascuas));
-        Pokemon charmeleon = new Pokemon("Charmeleon", 16, statsCharmeleon, List.of(fuego), List.of(placaje, latigo, giroFuego));
-        Pokemon charizard = new Pokemon("Charizard", 36, statsCharizard, List.of(fuego, volador), List.of(golpeCuerpo, latigo, llamarada));
-        Pokemon vulpix = new Pokemon("Vulpix", 5, statsVulpix, List.of(fuego), List.of(placaje, golpeCuerpo, ascuas));
-        Pokemon growlithe = new Pokemon("Growlithe", 5, statsGrowlithe, List.of(fuego), List.of(golpeCuerpo, placaje, giroFuego));
+        Pokemon charmander = new Pokemon("Charmander", 1, statsCharmander, List.of(fuego), List.of(placaje, golpeCuerpo, ascuas));
+        Pokemon charmeleon = new Pokemon("Charmeleon", 1, statsCharmeleon, List.of(fuego), List.of(placaje, latigo, giroFuego));
+        Pokemon charizard = new Pokemon("Charizard", 1, statsCharizard, List.of(fuego, volador), List.of(golpeCuerpo, latigo, llamarada));
+        Pokemon vulpix = new Pokemon("Vulpix", 1, statsVulpix, List.of(fuego), List.of(placaje, golpeCuerpo, ascuas));
+        Pokemon growlithe = new Pokemon("Growlithe", 1, statsGrowlithe, List.of(fuego), List.of(golpeCuerpo, placaje, giroFuego));
         // Agua
-        Pokemon squirtle = new Pokemon("Squirtle", 5, statsSquirtle, List.of(agua), List.of(placaje, golpeCuerpo, pistolaAgua));
-        Pokemon wartortle = new Pokemon("Wartortle", 16, statsWartortle, List.of(agua), List.of(latigo, placaje, surf));
-        Pokemon blastoise = new Pokemon("Blastoise", 36, statsBlastoise, List.of(agua), List.of(golpeCuerpo, placaje, hidrobomba));
-        Pokemon psyduck = new Pokemon("Psyduck", 5, statsPsyduck, List.of(agua), List.of(placaje, latigo, pistolaAgua));
-        Pokemon lapras = new Pokemon("Lapras", 20, statsLapras, List.of(agua), List.of(golpeCuerpo, latigo, surf));
+        Pokemon squirtle = new Pokemon("Squirtle", 1, statsSquirtle, List.of(agua), List.of(placaje, golpeCuerpo, pistolaAgua));
+        Pokemon wartortle = new Pokemon("Wartortle", 1, statsWartortle, List.of(agua), List.of(latigo, placaje, surf));
+        Pokemon blastoise = new Pokemon("Blastoise", 1, statsBlastoise, List.of(agua), List.of(golpeCuerpo, placaje, hidrobomba));
+        Pokemon psyduck = new Pokemon("Psyduck", 1, statsPsyduck, List.of(agua), List.of(placaje, latigo, pistolaAgua));
+        Pokemon lapras = new Pokemon("Lapras", 1, statsLapras, List.of(agua), List.of(golpeCuerpo, latigo, surf));
         // Planta
-        Pokemon bulbasaur = new Pokemon("Bulbasaur", 5, statsBulbasaur, List.of(planta), List.of(placaje, golpeCuerpo, latigoCepa));
-        Pokemon ivysaur = new Pokemon("Ivysaur", 16, statsIvysaur, List.of(planta), List.of(latigo, placaje, hojaAfilada));
-        Pokemon venusaur = new Pokemon("Venusaur", 36, statsVenusaur, List.of(planta), List.of(golpeCuerpo, latigo, rayoSolar));
-        Pokemon oddish = new Pokemon("Oddish", 5, statsOddish, List.of(planta), List.of(placaje, golpeCuerpo, latigoCepa));
-        Pokemon bellsprout = new Pokemon("Bellsprout", 5, statsBellsprout, List.of(planta), List.of(golpeCuerpo, placaje, hojaAfilada));
+        Pokemon bulbasaur = new Pokemon("Bulbasaur", 1, statsBulbasaur, List.of(planta), List.of(placaje, golpeCuerpo, latigoCepa));
+        Pokemon ivysaur = new Pokemon("Ivysaur", 1, statsIvysaur, List.of(planta), List.of(latigo, placaje, hojaAfilada));
+        Pokemon venusaur = new Pokemon("Venusaur", 1, statsVenusaur, List.of(planta), List.of(golpeCuerpo, latigo, rayoSolar));
+        Pokemon oddish = new Pokemon("Oddish", 1, statsOddish, List.of(planta), List.of(placaje, golpeCuerpo, latigoCepa));
+        Pokemon bellsprout = new Pokemon("Bellsprout", 1, statsBellsprout, List.of(planta), List.of(golpeCuerpo, placaje, hojaAfilada));
         // Eléctrico
-        Pokemon pikachu = new Pokemon("Pikachu", 5, statsPikachu, List.of(electrico), List.of(placaje, golpeCuerpo, impactrueno));
-        Pokemon raichu = new Pokemon("Raichu", 20, statsRaichu, List.of(electrico), List.of(latigo, placaje, rayo));
-        Pokemon magnemite = new Pokemon("Magnemite", 5, statsMagnemite, List.of(electrico), List.of(golpeCuerpo, placaje, chispazo));
-        Pokemon voltorb = new Pokemon("Voltorb", 5, statsVoltorb, List.of(electrico), List.of(placaje, golpeCuerpo, impactrueno));
-        Pokemon electabuzz = new Pokemon("Electabuzz", 30, statsElectabuzz, List.of(electrico), List.of(golpeCuerpo, latigo, rayo));
+        Pokemon pikachu = new Pokemon("Pikachu", 1, statsPikachu, List.of(electrico), List.of(placaje, golpeCuerpo, impactrueno));
+        Pokemon raichu = new Pokemon("Raichu", 1, statsRaichu, List.of(electrico), List.of(latigo, placaje, rayo));
+        Pokemon magnemite = new Pokemon("Magnemite", 1, statsMagnemite, List.of(electrico), List.of(golpeCuerpo, placaje, chispazo));
+        Pokemon voltorb = new Pokemon("Voltorb", 1, statsVoltorb, List.of(electrico), List.of(placaje, golpeCuerpo, impactrueno));
+        Pokemon electabuzz = new Pokemon("Electabuzz", 1, statsElectabuzz, List.of(electrico), List.of(golpeCuerpo, latigo, rayo));
         // Volador
-        Pokemon pidgey = new Pokemon("Pidgey", 5, statsPidgey, List.of(volador, normal), List.of(placaje, golpeCuerpo, ataqueAla));
-        Pokemon pidgeotto = new Pokemon("Pidgeotto", 18, statsPidgeotto, List.of(volador, normal), List.of(latigo, placaje, picado));
-        Pokemon pidgeot = new Pokemon("Pidgeot", 36, statsPidgeot, List.of(volador, normal), List.of(golpeCuerpo, latigo, tornado));
-        Pokemon zubat = new Pokemon("Zubat", 5, statsZubat, List.of(volador, normal), List.of(placaje, golpeCuerpo, ataqueAla));
-        Pokemon fearow = new Pokemon("Fearow", 20, statsFearow, List.of(volador, normal), List.of(golpeCuerpo, placaje, picado));
+        Pokemon pidgey = new Pokemon("Pidgey", 1, statsPidgey, List.of(volador, normal), List.of(placaje, golpeCuerpo, ataqueAla));
+        Pokemon pidgeotto = new Pokemon("Pidgeotto", 1, statsPidgeotto, List.of(volador, normal), List.of(latigo, placaje, picado));
+        Pokemon pidgeot = new Pokemon("Pidgeot", 1, statsPidgeot, List.of(volador, normal), List.of(golpeCuerpo, latigo, tornado));
+        Pokemon zubat = new Pokemon("Zubat", 1, statsZubat, List.of(volador, normal), List.of(placaje, golpeCuerpo, ataqueAla));
+        Pokemon fearow = new Pokemon("Fearow", 1, statsFearow, List.of(volador, normal), List.of(golpeCuerpo, placaje, picado));
         // Normal
-        Pokemon snorlax = new Pokemon("Snorlax", 30, statsSnorlax, List.of(normal), List.of(placaje, golpeCuerpo, latigo));
-        Pokemon rattata = new Pokemon("Rattata", 5, statsRattata, List.of(normal), List.of(latigo, placaje, placaje));
-        Pokemon jigglypuff = new Pokemon("Jigglypuff", 5, statsJigglypuff, List.of(normal), List.of(golpeCuerpo, latigo, placaje));
-        Pokemon meowth = new Pokemon("Meowth", 5, statsMeowth, List.of(normal), List.of(placaje, golpeCuerpo, latigo));
-        Pokemon eevee = new Pokemon("Eevee", 5, statsEevee, List.of(normal), List.of(golpeCuerpo, placaje, latigo));
+        Pokemon snorlax = new Pokemon("Snorlax", 1, statsSnorlax, List.of(normal), List.of(placaje, golpeCuerpo, latigo));
+        Pokemon rattata = new Pokemon("Rattata", 1, statsRattata, List.of(normal), List.of(latigo, placaje, placaje));
+        Pokemon jigglypuff = new Pokemon("Jigglypuff", 1, statsJigglypuff, List.of(normal), List.of(golpeCuerpo, latigo, placaje));
+        Pokemon meowth = new Pokemon("Meowth", 1, statsMeowth, List.of(normal), List.of(placaje, golpeCuerpo, latigo));
+        Pokemon eevee = new Pokemon("Eevee", 1, statsEevee, List.of(normal), List.of(golpeCuerpo, placaje, latigo));
+        /*
+         * Se asignan todos los objetos pokémon al arreglo pokemones:
+        */
+        pokemones = new Pokemon[] {
+        charmander, charmeleon, charizard, vulpix, growlithe,
+        squirtle, wartortle, blastoise, psyduck, lapras,
+        bulbasaur, ivysaur, venusaur, oddish, bellsprout,
+        pikachu, raichu, magnemite, voltorb, electabuzz,
+        pidgey, pidgeotto, pidgeot, zubat, fearow,
+        snorlax, rattata, jigglypuff, meowth, eevee
+        };
         }
 
     private void elegirPokemones() {

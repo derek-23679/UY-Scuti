@@ -34,4 +34,4 @@ public class Stats {
     public int getSpd() { 
         return spd; 
     }
-} // PRUEBA
+}
