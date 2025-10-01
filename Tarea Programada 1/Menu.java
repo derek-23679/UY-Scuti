@@ -11,29 +11,29 @@ public class Menu {
     public Menu() {
         scanner = new Scanner(System.in);
         nombre = null;
-        pokemones = new Pokemon[1];
         pokemonesJugador = new Pokemon[3];
     }
 
     public void iniciar() {
-        boolean hold = true;
+    boolean hold = true;
 
-        while (hold) {
-            System.out.println("========= POKEMON =========\nPresione ENTER para continuar");
-            
-            if (scanner.nextLine() != null) {
-                hold = false;
-            }
+    while (hold) {
+        System.out.println("========= POKEMON =========\nPresiona ENTER para continuar");
+        
+        if (scanner.nextLine() != null) {
+            hold = false;
         }
+    }
 
-        pedirNombre();
+    pedirNombre();
 
-        // Elegir 3 pokemones
-        for (int i = 0; i < 2; i++) {
-            elegirPokemones();
-        }
+    // Mostrar lista de pokemones con datos
+    datosPokemones();
 
-        jugador = new Entrenador(nombre, true, pokemonesJugador);
+    // Elegir 3 pokemones
+    elegirPokemones();
+
+    jugador = new Entrenador(nombre, true, pokemonesJugador);
     }
 
     private void pedirNombre() {
@@ -124,8 +124,8 @@ public class Menu {
         Ataque picado = new Ataque("Picado", volador, 80, 30, 100);
         Ataque tornado = new Ataque("Tornado", volador, 80, 20, 95);
         /* Pokemones que se tomarán en cuenta, divididos por elemento
-         * Se seleccionaron 5 pokémon por cada uno de los 6 elementos, para un total de 30
-         * Cada pokémon tiene 3 ataques; 1 ataque básico y 2 ataques relativo a su elemento
+         * Se seleccionaron 5 pokemones por cada uno de los 6 elementos, para un total de 30
+         * Cada pokémon tiene 3 ataques; 1 ataque básico y 2 ataques relativos a su elemento
         */
         // Fuego
         Pokemon charmander = new Pokemon("Charmander", 1, statsCharmander, List.of(fuego), List.of(placaje, golpeCuerpo, ascuas));
@@ -176,49 +176,71 @@ public class Menu {
         };
         }
 
+    /* 
+     * Método para la selección de 3 pokemones que se asignarán al jugador (entrenador):
+    */
     private void elegirPokemones() {
         System.out.println("--------- Elección de pokemones ---------");
 
-        // Print de pokemones para elegir
-        for (int i = 0; i < pokemones.length - 1; i++) {
-            System.out.print(i + 1 + ") ");
-            pokemonToString(pokemones[i]);
-        }
+        // Mostrar lista al inicio de la selección
+        mostrarPokemonesDisponibles();
 
-        System.out.println("¿Qué pokemon desea?");
-        int opcion = -1;
-        int contador = -1;
+        int contador = 0;
+        while (contador < 3) {
+            System.out.printf("Escribe el nombre de los pokemones que formarán tu equipo (%d/3): ", contador + 1);
+            String nombreElegido = scanner.nextLine().trim();
 
-        // No hay pokemon 0, empieza en 1
-        while (opcion >= 0) {
-            try {
-                opcion = Integer.parseInt(scanner.nextLine());
-                opcion--;
-                contador++;
-            } catch (Exception error) {
-                System.out.println(error);
-                opcion = -1;
+            boolean encontrado = false;
+            for (int i = 0; i < pokemones.length; i++) {
+                if (pokemones[i].getNombre().equalsIgnoreCase(nombreElegido)) {
+                    // Pokémon encontrado -> asignarlo al array de pokemones del jugador
+                    pokemonesJugador[contador] = pokemones[i];
+                    System.out.println(pokemones[i].getNombre() + " seleccionado.\n");
+
+                    // Crear un array temporal sin el Pokémon seleccionado
+                    Pokemon[] pokemonesTemp = new Pokemon[pokemones.length - 1];
+                    int idxTemp = 0;
+                    for (int j = 0; j < pokemones.length; j++) {
+                        if (j != i) {
+                        pokemonesTemp[idxTemp++] = pokemones[j];
+                        }
+                    }
+                    // Actualizar la lista de pokemones disponibles
+                    pokemones = pokemonesTemp;
+
+                    encontrado = true;
+                    contador++;
+                    break;
+                }
             }
-        
-        pokemonesJugador[contador] = pokemones[opcion];
 
-        // Modificar la lista original de pokemones para quitar el pokemon seleccionado
-        Pokemon[] pokemonesTemp = new Pokemon[pokemones.length - 1];
-        int contador2 = 0;
-
-        for (int i = 0; i < pokemones.length; i++) {
-            if (i != opcion) {
-                pokemonesTemp[contador2] = pokemones[contador2];
-                contador++;
+            if (!encontrado) {
+                System.out.println("Pokémon no encontrado. Nombre mal escrito...?\n");
             }
-        }
-
-        pokemones = pokemonesTemp;
         }
     }
 
+    /* 
+     * Método para imprimir la lista de pokemones y sus respectivos datos al inicio de la selección:
+    */
+    private void mostrarPokemonesDisponibles() {
+        System.out.println("\nPokemones disponibles:\n");
+        for (Pokemon p : pokemones) {
+            if (p == null) continue; // evita null si el array lo contuviera
+            String elementos = "";
+            for (Elemento e : p.getElementos()) {
+                elementos += e.getNombre() + " ";
+            }
+            Stats s = p.getStats();
+            // Se imprimen el nombre, elementos y stats de forma formateada
+            System.out.printf("%s | Elementos: %s| HP:%d ATK:%d DEF:%d SPD:%d\n",
+            p.getNombre(), elementos.trim(), s.getHp(), s.getAtk(), s.getDef(), s.getSpd());
+        }
+        System.out.println();
+    }
+
     private void pokemonToString(Pokemon pokemon) {
-        // Para hacer print para la elección del pokemon
+        // Para hacer print para la elección del pokémon
         System.out.printf("%s Lv%d\n", pokemon.getNombre(), pokemon.getNivel());
     }
 }
