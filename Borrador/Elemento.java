@@ -3,9 +3,9 @@ public class Elemento {
     private String[] debilidades;
     private String[] fortalezas;
 
-    public Elemento() {
-        nombre = null;
-        debilidades = new String[1];
-        fortalezas = new String[1];
+    public Elemento(String nombre, String[] debilidades, String[] fortalezas) {
+        this.nombre = nombre;
+        this.debilidades = debilidades;
+        this.fortalezas = fortalezas;
     }
 }
