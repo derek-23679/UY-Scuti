@@ -1,28 +1,32 @@
-/**
- * Objeto entrador: nombre, si es jugador y sus pokemon.
- */
-
 public class Entrenador {
     private String nombre;
     private boolean esJugador;
+    private boolean esLider;
     private Pokemon[] pokemones;
 
     public Entrenador(String nombre, boolean esJugador, Pokemon[] pokemones) {
         this.nombre = nombre;
         this.esJugador = esJugador;
         this.pokemones = pokemones;
+        this.esLider = false;
     }
 
     // Getters
-    public String getNombre() { 
-        return nombre; 
+    public String getNombre() {
+        return nombre;
     }
-
-    public boolean isJugador() { 
-        return esJugador; 
+    public boolean isJugador() {
+        return esJugador;
     }
-    
-    public Pokemon[] getPokemones() { 
-        return pokemones; 
+    public Pokemon[] getPokemones() {
+        return pokemones;
+    }
+    public void setLider() {
+        if (!esJugador) {
+            esLider = true;
+        }
+    }
+    public boolean isLider() {
+        return esLider;
     }
 }
