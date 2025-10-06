@@ -2,16 +2,16 @@ public class Ataque {
     private String nombre;
     private Elemento elemento;
     private int potencia;
-    private int PPMax;
+    private int PPmax;
     private int PPactual;
     private int precision;
 
-    public Ataque(String nombre, Elemento elemento, int potencia, int PPMax, int precision) {
+    public Ataque(String nombre, Elemento elemento, int potencia, int PPmax, int precision) {
         this.nombre = nombre;
         this.elemento = elemento;
         this.potencia = potencia;
-        this.PPMax = PPMax;
-        this.PPactual = PPMax;
+        this.PPmax = PPmax;
+        this.PPactual = PPmax;
         this.precision = precision;
     }
 
@@ -20,15 +20,18 @@ public class Ataque {
         return nombre;
     }
     public Elemento getElemento() {
-    return elemento;
+        return elemento;
     }
     public int getPotencia() {
-    return potencia;
+        return potencia;
     }
     public int getPPMax() {
-    return PPMax;
+        return PPmax;
+    }
+    public int getPPactual() {
+        return PPactual;
     }
     public int getPrecision() {
-    return precision;
+        return precision;
     }
 }

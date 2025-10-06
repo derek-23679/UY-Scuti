@@ -14,30 +14,32 @@ public class Pokemon {
         this.stats = stats;
         this.elementos = elementos;
         this.ataques = ataques;
-        debilitado = false;
+        this.debilitado = false;
     }
 
     // Getters
     public String getNombre() {
         return nombre;
     }
-
     public Stats getStats() {
         return stats;
     }
-
+    public int getNivel() {
+        return nivel;
+    }
     public Elemento[] getElementos() {
         return elementos;
     }
-
     public Ataque[] getAtaques() {
         return ataques;
     }
-
     public Ataque getAtaqueActivo() {
         return ataqueActivo;
     }
     public void setAtaqueActivo(Ataque ataqueActivo) {
         this.ataqueActivo = ataqueActivo;
+    }
+    public boolean isDebilitado() {
+        return debilitado;
     }
 }

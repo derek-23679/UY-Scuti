@@ -13,4 +13,10 @@ public class Elemento {
     public String getNombre() {
         return nombre;
     }
+    public String[] getDebilidades() {
+        return debilidades;
+    }
+    public String[] getFortalezas() {
+        return fortalezas;
+    }
 }

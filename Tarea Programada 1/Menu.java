@@ -295,7 +295,7 @@ public class Menu {
      * Al igual que pokemonActivoNpc(), no se permite elegir un pokémon que está deshabilitado (HP <= 0)
     */
         private void pokemonActivoJugador(Entrenador jugador) {
-            System.out.println("\nElije un pokémon para atacar (1, 2, 3): ");
+            System.out.println("\nElije tu siguiente pokémon (1, 2, 3)");
             Pokemon[] equipo = jugador.getPokemones();
             for (int i = 0; i < equipo.length; i++) {
             System.out.printf("%d. %s\n", i + 1, equipo[i].getNombre());
@@ -305,12 +305,12 @@ public class Menu {
                 try {
                     opcion = Integer.parseInt(scanner.nextLine());
                     Pokemon elegido = equipo[opcion - 1];
-                    if (elegido.getStats().getHp() <= 0) { // verifica si está debilitado
-                        System.out.println(elegido.getNombre() + " está debilitado.");
+                    if (elegido.isDebilitado()) { // verifica si está debilitado
+                        System.out.printf("%s está debilitado.\n", elegido.getNombre());
                         opcion = -1; // volver a pedir
                     } else {
                         jugador.setPokemonActivo(elegido);
-                        System.out.println("Has elegido " + elegido.getNombre() + "!");
+                        System.out.printf("%s: %s yo te elijo!\n", jugador.getNombre(), elegido.getNombre());
                     }
                 } catch (Exception e) {
                     System.out.println("Escribe el número que corresponda a tu pokémon (1, 2, 3): ");
