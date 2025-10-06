@@ -1,6 +1,11 @@
 import java.util.Random;
 import java.util.Scanner;
 
+/**
+ * La interfaz que ve el usuario
+ * @author UY Scuti
+ * @version 1.0
+ */
 public class Menu {
     private Scanner scanner;
     private Entrenador jugador;
@@ -8,6 +13,9 @@ public class Menu {
     private Pokemon[] pokemonesJugador;
     private Gimnasio[] gimnasios;
 
+    /**
+     * Constructor del menu
+     */
     public Menu() {
         scanner = new Scanner(System.in);
         pokemones = new Pokemon[1];
@@ -15,6 +23,9 @@ public class Menu {
         pokemonesJugador = new Pokemon[3];
     }
 
+    /**
+     * Da inicio al menu
+     */
     public void iniciar() {
         boolean signal = false;
 
@@ -34,12 +45,19 @@ public class Menu {
         elegirGimnasio();
     }
 
+    /**
+     * Pide el nombre del usuario
+     * @return Nombre que ingresó el usuario
+     */
     private String pedirNombre() {
         System.out.println("Tu nombre es...");
         String nombreTemp = scanner.nextLine();
         return nombreTemp;
     }
 
+    /**
+     * Genera los datos: elementos, stats, ataques, pokemones, entrenadores y gimnasios.
+     */
     private void generarDatos() {
         // Elementos
         Elemento fuego = new Elemento("Fuego", new String[] {"Planta", "Volador"}, new String[] {"Agua"});
@@ -176,6 +194,9 @@ public class Menu {
         gimnasios = gimnasiosTemp;
     }
 
+    /**
+     * Hace display de los datos de los pokemones que puede elegir el jugador.
+     */
     private void mostrarPokemones() {
         System.out.println("-------- POKEMONES --------");
         for (Pokemon p : pokemones) {
@@ -197,6 +218,9 @@ public class Menu {
         System.out.println();
     }
 
+    /**
+     * Hace display de los datos de los gimnasios que puede elegir el jugador.
+     */
     private void mostrarGimnasios() {
         System.out.println("-------- GIMNASIOS --------");
         for (int i = 0; i < gimnasios.length; i++) {
@@ -215,6 +239,9 @@ public class Menu {
         }
     }
 
+    /**
+     * Le pide al usuario que elija 3 pokemones iniciales
+     */
     private void elegirPokemones() {
         mostrarPokemones();
         int contador = 0;
@@ -247,6 +274,9 @@ public class Menu {
         }
     }
 
+    /**
+     * Le pide al usuario que elija el gimnasio que quiere desafiar
+     */
     private void elegirGimnasio() {
         mostrarGimnasios();
         int opcion = -1;
@@ -271,10 +301,12 @@ public class Menu {
 
     }
 
-    /* Método para que el NPC (enemigo) elija un pokémon aleaorio de entre sus 3 pokemones
-     * Se asegura de no elegir un Pokémon debilitado (HP <= 0)
-     * Asigna el Pokémon elegido como parámetro de pokemonActivo para Entrenador npc
-    */
+    /**
+     * Hace que el NPC (rival) elija un pokemon aleatorio entre los que tiene.
+     * Este pokemon no puede estar debilitado.
+     * Es el parámetro de pokemonActivo() del NPC.
+     * @param npc El entrenador NPC
+     */
     private void pokemonActivoNpc(Entrenador npc) {
         Random random = new Random();
         Pokemon[] equipo = npc.getPokemones();
@@ -284,46 +316,47 @@ public class Menu {
         do {
             indice = random.nextInt(3);
             pokemonNpc = equipo[indice];
-        } while (pokemonNpc.getStats().getHp() <= 0);
+        } while (!pokemonNpc.isDebilitado());
 
         npc.setPokemonActivo(pokemonNpc);
         System.out.println("    \n" + npc.getNombre() + " elije " + npc.getPokemonActivo().getNombre() + "!");
     }
 
-    /* Método para que el jugador elija su Pokémon activo
-     * Se imprime la lista de los 3 pokémon anteriormente elegidos en elegirPokemones()
-     * Al igual que pokemonActivoNpc(), no se permite elegir un pokémon que está deshabilitado (HP <= 0)
-    */
-        private void pokemonActivoJugador(Entrenador jugador) {
-            System.out.println("\nElije tu siguiente pokémon (1, 2, 3)");
-            Pokemon[] equipo = jugador.getPokemones();
-            for (int i = 0; i < equipo.length; i++) {
+    /**
+     * Asigna el pokemon activo del jugador.
+     * Permite al jugador elegir entre sus 3 pokemones.
+     * El pokemon elegido no puede estar debilitado.
+     * @param jugador El entrenador jugador
+     */
+    private void pokemonActivoJugador(Entrenador jugador) {
+        System.out.println("\nElije tu siguiente pokémon (1, 2, 3)");
+        Pokemon[] equipo = jugador.getPokemones();
+        for (int i = 0; i < equipo.length; i++) {
             System.out.printf("%d. %s\n", i + 1, equipo[i].getNombre());
-            }
-            int opcion = -1;
-            while (opcion < 1 || opcion > 3) {
-                try {
-                    opcion = Integer.parseInt(scanner.nextLine());
-                    Pokemon elegido = equipo[opcion - 1];
-                    if (elegido.isDebilitado()) { // verifica si está debilitado
-                        System.out.printf("%s está debilitado.\n", elegido.getNombre());
-                        opcion = -1; // volver a pedir
-                    } else {
-                        jugador.setPokemonActivo(elegido);
-                        System.out.printf("%s: %s yo te elijo!\n", jugador.getNombre(), elegido.getNombre());
-                    }
-                } catch (Exception e) {
-                    System.out.println("Escribe el número que corresponda a tu pokémon (1, 2, 3): ");
+        }
+        int opcion = -1;
+        while (opcion < 1 || opcion > 3) {
+            try {
+                opcion = Integer.parseInt(scanner.nextLine());
+                Pokemon elegido = equipo[opcion - 1];
+                if (elegido.isDebilitado()) { // verifica si está debilitado
+                    System.out.printf("%s está debilitado.\n", elegido.getNombre());
+                    opcion = -1; // volver a pedir
+                } else {
+                    jugador.setPokemonActivo(elegido);
+                    System.out.printf("%s: %s yo te elijo!\n", jugador.getNombre(), elegido.getNombre());
                 }
+            } catch (Exception e) {
+                System.out.println("Ingrese un número (1, 2, 3)");
             }
         }
+    }
 
-    /* Muestra las stats del Pokémon actualmente activo de un entrenador
-     * Se puede llamar como mostrarStats(jugador) o mostrarStats(npc)
-     * Se llama después de elegir el Pokémon que atacará primero para mostrar sus stats
-     * La idea es que se llame para ambos pokemones activos después de cada interacción en la pelea para mostrar sus nuevos valores de HP, tras el daño causado y recibido
-    */
-        private void mostrarStats(Entrenador entrenador) {
+    /**
+     * Muestra las estadísticas del pokemon activo de un entrenador
+     * @param entrenador El entrenador del que queremos ver el pokemon
+     */
+    private void mostrarStats(Entrenador entrenador) {
         Pokemon activo = entrenador.getPokemonActivo();
         if (activo != null) {
             Stats s = activo.getStats();
@@ -334,11 +367,13 @@ public class Menu {
         }
     }
 
-    /* Método para que el jugador elija un ataque de su pokémon activo
-     * Muestra los ataques con stats disponibles para dicho pokémon, y el jugador elije uno mediante números (1, 2, 3)
-     * No se puede elegir un ataque si el pokémon activo no tiene suficientes PP para realizarlo
-     * Es improbable que un ataque se quede sin PP, pero la validación está ahí por si acaso
-    */
+    /**
+     * Asigna el ataque a usar del pokemon del jugador
+     * El usuario puede elegir el ataque que quiere usar
+     * Valida que el ataque tenga PP disponibles
+     * @param pokemon
+     * @param npc
+     */
     private void elegirAtaque(Pokemon pokemon, Entrenador npc) {
         System.out.println("Ataques disponibles: ");
         Ataque[] ataques = pokemon.getAtaques();
@@ -361,7 +396,7 @@ public class Menu {
                     pokemon.setAtaqueActivo(ataqueElegido);
                     System.out.println("Has elegido " + ataqueElegido.getNombre() + "!");
                 } else {
-                    System.out.println(pokemon.getNombre()+" no tiene PP sufientes para usar "+ataqueElegido.getNombre()+".");
+                    System.out.println(pokemon.getNombre()+" no tiene PP sufientes para usar " + ataqueElegido.getNombre()+".");
                     opcion = -1; // volver a pedir
                 }
             } catch (Exception e) {
@@ -370,7 +405,12 @@ public class Menu {
         }
     }
 
-    // Combate WIP
+    /**
+     * Inicia el combate entre el jugador y el NPC
+     * WIP
+     * @param jugador Entrenador jugador
+     * @param npc Entrenador NPC
+     */
     private void iniciarCombate(Entrenador jugador, Entrenador npc) {
         pokemonActivoJugador(jugador);
         pokemonActivoNpc(npc);
