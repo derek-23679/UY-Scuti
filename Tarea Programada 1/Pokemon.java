@@ -5,6 +5,8 @@ public class Pokemon {
     private Elemento[] elementos;
     private Ataque[] ataques;
     private boolean debilitado;
+    private Ataque ataqueActivo;
+
 
     public Pokemon(String nombre, int nivel, Stats stats, Elemento[] elementos, Ataque[] ataques) {
         this.nombre = nombre;
@@ -19,10 +21,23 @@ public class Pokemon {
     public String getNombre() {
         return nombre;
     }
+
     public Stats getStats() {
         return stats;
     }
+
     public Elemento[] getElementos() {
         return elementos;
+    }
+
+    public Ataque[] getAtaques() {
+        return ataques;
+    }
+
+    public Ataque getAtaqueActivo() {
+        return ataqueActivo;
+    }
+    public void setAtaqueActivo(Ataque ataqueActivo) {
+        this.ataqueActivo = ataqueActivo;
     }
 }
