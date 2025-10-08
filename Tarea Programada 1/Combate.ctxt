@@ -1,0 +1,25 @@
+#BlueJ class context
+comment0.target=Combate
+comment0.text=\r\n\ Controla\ la\ loogica\ del\ combate\ entre\ dos\ entrenadores\r\n\ Gestiona\ turnos,\ danio,\ ataques,\ debilitaciones\ y\ ganador\ final\r\n\ @author\ UY\ Scuti\r\n\ @version\ 1.1\r\n
+comment1.params=jugador\ enemigo\ scanner
+comment1.target=Combate(Entrenador,\ Entrenador,\ java.util.Scanner)
+comment1.text=\r\n\ Constructor\ del\ combate\r\n\ @param\ jugador\ Entrenador\ jugador\r\n\ @param\ enemigo\ Entrenador\ enemigo\ (NPC)\r\n\ @param\ scanner\ Para\ leer\ las\ opciones\ del\ usuario\r\n
+comment2.params=
+comment2.target=void\ iniciarCombate()
+comment2.text=\r\n\ inicia\ el\ combate\ entre\ el\ jugador\ y\ el\ enemigo\r\n
+comment3.params=
+comment3.target=void\ realizarTurno()
+comment3.text=\r\n\ Ejecuta\ un\ turno\ de\ combate\ donde\ ambos\ atacan\ segun\ su\ velocidad\r\n
+comment4.params=atacante\ objetivo
+comment4.target=Ataque\ elegirAtaqueJugador(Pokemon,\ Pokemon)
+comment4.text=\r\n\ Permite\ al\ jugador\ elegir\ un\ ataque\r\n
+comment5.params=atacante\ defensor\ ataque
+comment5.target=void\ atacar(Pokemon,\ Pokemon,\ Ataque)
+comment5.text=\r\n\ Realiza\ el\ ataque\ de\ un\ Pokemon\ a\ otro\ y\ calcula\ el\ danio\r\n
+comment6.params=e
+comment6.target=boolean\ tienePokemonesVivos(Entrenador)
+comment7.params=e
+comment7.target=void\ cambiarPokemon(Entrenador)
+comment8.params=enemigo
+comment8.target=Ataque\ enemigoEligeAtaque(Pokemon)
+numComments=9

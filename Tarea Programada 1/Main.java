@@ -1,5 +1,5 @@
 /**
- * Punto de inicio del programa.
+ * Punto de inicio del programa
  * @author UY Scuti
  * @version 1.0
  */

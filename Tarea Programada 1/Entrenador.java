@@ -1,5 +1,6 @@
 /**
- * Objeto entrenador: recopila los parámetros que forman un entrenador.
+ * Objeto entrenador: recopila los parámetros que forman un entrenador
+ * 
  */
 public class Entrenador {
     private String nombre;

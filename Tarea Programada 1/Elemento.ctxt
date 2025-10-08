@@ -1,0 +1,16 @@
+#BlueJ class context
+comment0.target=Elemento
+comment0.text=\r\n\ Objeto\ elemento\:\ recopila\ los\ par\u00E1metros\ que\ forman\ un\ elemento\r\n\ @author\ UY\ Scuti\r\n\ @version\ 1.0\r\n
+comment1.params=nombre\ debilidades\ fortalezas
+comment1.target=Elemento(java.lang.String,\ java.lang.String[],\ java.lang.String[])
+comment1.text=\r\n\ Constructor\ del\ objeto\ elemento\r\n\ @param\ nombre\ Nombre\ del\ elemento\r\n\ @param\ debilidades\ Lista\ de\ nombres\ de\ elementos\ contra\ los\ que\ es\ debil\r\n\ @param\ fortalezas\ Lista\ de\ nombres\ de\ elementos\ contra\ los\ que\ es\ fuerte\r\n
+comment2.params=
+comment2.target=java.lang.String\ getNombre()
+comment2.text=\r\n\ Getter\r\n\ @return\ Nombre\ del\ elemento\r\n
+comment3.params=
+comment3.target=java.lang.String[]\ getDebilidades()
+comment3.text=\r\n\ Getter\r\n\ @return\ Lista\ de\ debilidades\r\n
+comment4.params=
+comment4.target=java.lang.String[]\ getFortalezas()
+comment4.text=\r\n\ Getter\r\n\ @return\ Lista\ de\ fortalezas\r\n
+numComments=5

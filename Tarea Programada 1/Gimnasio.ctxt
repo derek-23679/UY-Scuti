@@ -1,0 +1,16 @@
+#BlueJ class context
+comment0.target=Gimnasio
+comment0.text=\r\n\ Objeto\ gimnasio\:\ recopila\ los\ par\u00E1metros\ que\ forman\ un\ gimnasio\r\n\ @author\ UY\ Scuti\r\n\ @version\ 1.0\r\n
+comment1.params=nombre\ dificultad\ entrenadores
+comment1.target=Gimnasio(java.lang.String,\ java.lang.String,\ Entrenador[])
+comment1.text=\r\n\ Constructor\ del\ objeto\ gimnasio\r\n\ @param\ nombre\ Nombre\ del\ gimnasio\r\n\ @param\ dificultad\ Dificultad\ del\ gimnasio\r\n\ @param\ entrenadores\ Lista\ de\ entrenadores\ del\ gimnasio\r\n
+comment2.params=
+comment2.target=java.lang.String\ getNombre()
+comment2.text=\r\n\ Getter\r\n\ @return\ Nombre\ del\ gimnasio\r\n
+comment3.params=
+comment3.target=java.lang.String\ getDificultad()
+comment3.text=\r\n\ Getter\r\n\ @return\ Dificultad\ del\ gimnasio\r\n
+comment4.params=
+comment4.target=Entrenador[]\ getEntrenadores()
+comment4.text=\r\n\ Getter\r\n\ @return\ Lista\ de\ entrenadores\ del\ gimnasio\r\n
+numComments=5

@@ -1,0 +1,25 @@
+#BlueJ class context
+comment0.target=Pokemon
+comment0.text=\r\n\ Objeto\ pokemon\:\ recopila\ los\ par\u00E1metros\ que\ forman\ un\ pokemon\r\n\ @author\ UY\ Scuti\r\n\ @version\ 1.1\r\n
+comment1.params=nombre\ nivel\ stats\ elementos\ ataques
+comment1.target=Pokemon(java.lang.String,\ int,\ Stats,\ Elemento[],\ Ataque[])
+comment1.text=\r\n\ Constructor\ del\ objeto\ pokemon\r\n\ @param\ nombre\ Nombre\ del\ pokemon\r\n\ @param\ nivel\ Nivel\ del\ pokemon\r\n\ @param\ stats\ Stats\ del\ pokemon\r\n\ @param\ elementos\ Elementos\ del\ pokemon\r\n\ @param\ ataques\ Ataques\ del\ pokemon\r\n
+comment10.params=debilitado
+comment10.target=void\ setDebilitado(boolean)
+comment2.params=
+comment2.target=java.lang.String\ getNombre()
+comment3.params=
+comment3.target=Stats\ getStats()
+comment4.params=
+comment4.target=int\ getNivel()
+comment5.params=
+comment5.target=Elemento[]\ getElementos()
+comment6.params=
+comment6.target=Ataque[]\ getAtaques()
+comment7.params=
+comment7.target=Ataque\ getAtaqueActivo()
+comment8.params=
+comment8.target=boolean\ isDebilitado()
+comment9.params=ataqueActivo
+comment9.target=void\ setAtaqueActivo(Ataque)
+numComments=11

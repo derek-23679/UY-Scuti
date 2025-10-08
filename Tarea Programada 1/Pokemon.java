@@ -1,7 +1,7 @@
 /**
- * Objeto pokemon: recopila los parámetros que forman un pokemon.
+ * Objeto pokemon: recopila los parámetros que forman un pokemon
  * @author UY Scuti
- * @version 1.0
+ * @version 1.1
  */
 public class Pokemon {
     private String nombre;
@@ -29,67 +29,34 @@ public class Pokemon {
         this.debilitado = false;
     }
 
-    /**
-     * Getter
-     * @return Nombre del pokemon
-     */
-    public String getNombre() {
-        return nombre;
+    // --- Getters ---
+    public String getNombre() { 
+        return nombre; 
+    }
+    public Stats getStats() { 
+        return stats; 
+    }
+    public int getNivel() { 
+        return nivel; 
+    }
+    public Elemento[] getElementos() { 
+        return elementos; 
+    }
+    public Ataque[] getAtaques() { 
+        return ataques; 
+    }
+    public Ataque getAtaqueActivo() { 
+        return ataqueActivo; 
+    }
+    public boolean isDebilitado() { 
+        return debilitado; 
     }
 
-    /**
-     * Getter
-     * @return Stats del pokemon
-     */
-    public Stats getStats() {
-        return stats;
+    // --- Setters ---
+    public void setAtaqueActivo(Ataque ataqueActivo) { 
+        this.ataqueActivo = ataqueActivo; 
     }
-
-    /**
-     * Getter
-     * @return Nivel del pokemon
-     */
-    public int getNivel() {
-        return nivel;
-    }
-
-    /**
-     * Getter
-     * @return Elementos del pokemon
-     */
-    public Elemento[] getElementos() {
-        return elementos;
-    }
-
-    /**
-     * Getter
-     * @return Ataques del pokemon
-     */
-    public Ataque[] getAtaques() {
-        return ataques;
-    }
-
-    /**
-     * Getter
-     * @return Ataque en uso del pokemon
-     */
-    public Ataque getAtaqueActivo() {
-        return ataqueActivo;
-    }
-
-    /**
-     * Setter
-     * @param ataqueActivo Ataque en uso del pokemon
-     */
-    public void setAtaqueActivo(Ataque ataqueActivo) {
-        this.ataqueActivo = ataqueActivo;
-    }
-
-    /**
-     * Getter
-     * @return Si, el pokemon, está debilitado
-     */
-    public boolean isDebilitado() {
-        return debilitado;
+    public void setDebilitado(boolean debilitado) { 
+        this.debilitado = debilitado; 
     }
 }

@@ -1,5 +1,7 @@
 /**
- * Objeto stats: recopila los parámetros que forman los stats de un pokemon.
+ * Objeto stats: recopila los parámetros que forman los stats de un pokemon
+ * @author UY Scuti
+ * @version 1.1
  */
 public class Stats {
     private int hp;
@@ -10,7 +12,7 @@ public class Stats {
     /**
      * Constructor del objeto stats
      * @param hp Vida del pokemon
-     * @param atk Estadística de ataque del pokemon
+     * @param atk Estadstica de ataque del pokemon
      * @param def Defensa del pokemon
      * @param spd Velocidad del pokemon
      */
@@ -21,35 +23,31 @@ public class Stats {
         this.spd = spd;
     }
 
-    /**
-     * Getter
-     * @return Vida del pokemon
-     */
-    public int getHp() {
-        return hp;
+    // --- Getters ---
+    public int getHp() { 
+        return hp; 
+    }
+    public int getAtk() { 
+        return atk; 
+    }
+    public int getDef() { 
+        return def; 
+    }
+    public int getSpd() { 
+        return spd; 
     }
 
-    /**
-     * Getter
-     * @return Estadística de ataque del pokemon
-     */
-    public int getAtk() {
-        return atk;
+    // --- Setters ---
+    public void setHp(int hp) { 
+        this.hp = hp; 
     }
-
-    /**
-     * Getter
-     * @return Defensa del pokemon
-     */
-    public int getDef() {
-        return def;
+    public void setAtk(int atk) { 
+        this.atk = atk; 
     }
-
-    /**
-     * Getter
-     * @return Velocidad del pokemon
-     */
-    public int getSpd() {
-        return spd;
+    public void setDef(int def) { 
+        this.def = def; 
+    }
+    public void setSpd(int spd) { 
+        this.spd = spd; 
     }
 }

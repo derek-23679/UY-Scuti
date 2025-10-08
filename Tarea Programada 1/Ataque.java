@@ -1,5 +1,5 @@
 /**
- * Objeto ataque: recopila los parámetros que forman un ataque.
+ * Objeto ataque: recopila los parametros que forman un ataque
  * @author UY Scuti
  * @version 1.0
  */
@@ -16,8 +16,8 @@ public class Ataque {
      * @param nombre Nombre del ataque
      * @param elemento Tipo elemental del ataque
      * @param potencia Potencia del ataque
-     * @param PPmax El número de usos máximos en un ciclo del ataque
-     * @param precision La probabilidad de acertar el ataque
+     * @param PPmax El numero de usos maximos en un ciclo del ataque
+     * @param precision la probabilidad de acertar el ataque
      */
     public Ataque(String nombre, Elemento elemento, int potencia, int PPmax, int precision) {
         this.nombre = nombre;

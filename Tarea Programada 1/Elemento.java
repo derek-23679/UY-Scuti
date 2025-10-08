@@ -1,5 +1,5 @@
 /**
- * Objeto elemento: recopila los parámetros que forman un elemento.
+ * Objeto elemento: recopila los parámetros que forman un elemento
  * @author UY Scuti
  * @version 1.0
  */
@@ -11,8 +11,8 @@ public class Elemento {
     /**
      * Constructor del objeto elemento
      * @param nombre Nombre del elemento
-     * @param debilidades Lista de nombres de elementos contra los que es débil.
-     * @param fortalezas Lista de nombres de elementos contra los que es fuerte.
+     * @param debilidades Lista de nombres de elementos contra los que es debil
+     * @param fortalezas Lista de nombres de elementos contra los que es fuerte
      */
     public Elemento(String nombre, String[] debilidades, String[] fortalezas) {
         this.nombre = nombre;

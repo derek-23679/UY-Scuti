@@ -1,5 +1,5 @@
 /**
- * Objeto gimnasio: recopila los parámetros que forman un gimnasio.
+ * Objeto gimnasio: recopila los parámetros que forman un gimnasio
  * @author UY Scuti
  * @version 1.0
  */

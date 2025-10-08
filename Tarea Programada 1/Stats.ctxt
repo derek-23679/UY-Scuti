@@ -1,0 +1,23 @@
+#BlueJ class context
+comment0.target=Stats
+comment0.text=\r\n\ Objeto\ stats\:\ recopila\ los\ par\u00E1metros\ que\ forman\ los\ stats\ de\ un\ pokemon\r\n\ @author\ UY\ Scuti\r\n\ @version\ 1.1\r\n
+comment1.params=hp\ atk\ def\ spd
+comment1.target=Stats(int,\ int,\ int,\ int)
+comment1.text=\r\n\ Constructor\ del\ objeto\ stats\r\n\ @param\ hp\ Vida\ del\ pokemon\r\n\ @param\ atk\ Estadstica\ de\ ataque\ del\ pokemon\r\n\ @param\ def\ Defensa\ del\ pokemon\r\n\ @param\ spd\ Velocidad\ del\ pokemon\r\n
+comment2.params=
+comment2.target=int\ getHp()
+comment3.params=
+comment3.target=int\ getAtk()
+comment4.params=
+comment4.target=int\ getDef()
+comment5.params=
+comment5.target=int\ getSpd()
+comment6.params=hp
+comment6.target=void\ setHp(int)
+comment7.params=atk
+comment7.target=void\ setAtk(int)
+comment8.params=def
+comment8.target=void\ setDef(int)
+comment9.params=spd
+comment9.target=void\ setSpd(int)
+numComments=10

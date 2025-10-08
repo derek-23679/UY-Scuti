@@ -56,7 +56,7 @@ public class Menu {
     }
 
     /**
-     * Genera los datos: elementos, stats, ataques, pokemones, entrenadores y gimnasios.
+     * Genera los datos: elementos, stats, ataques, pokemones, entrenadores y gimnasios
      */
     private void generarDatos() {
         // Elementos
@@ -195,7 +195,7 @@ public class Menu {
     }
 
     /**
-     * Hace display de los datos de los pokemones que puede elegir el jugador.
+     * Hace display de los datos de los pokemones que puede elegir el jugador
      */
     private void mostrarPokemones() {
         System.out.println("-------- POKEMONES --------");
@@ -219,7 +219,7 @@ public class Menu {
     }
 
     /**
-     * Hace display de los datos de los gimnasios que puede elegir el jugador.
+     * Hace display de los datos de los gimnasios que puede elegir el jugador
      */
     private void mostrarGimnasios() {
         System.out.println("-------- GIMNASIOS --------");
@@ -273,63 +273,156 @@ public class Menu {
                 }
         }
     }
-
+    
     /**
-     * Le pide al usuario que elija el gimnasio que quiere desafiar
+     * Permite al jugador elegir un gimnasio y combate contra todos sus entrenadores
+     * 
      */
     private void elegirGimnasio() {
-        mostrarGimnasios();
-        int opcion = -1;
-        while (opcion > 3 || opcion < 1) {
+        boolean continuar = true;
+    
+        while (continuar) {
+            mostrarGimnasios();
+            System.out.println("Selecciona un gimnasio para desafiar (1-3), o 0 para salir:");
+            int opcion = -1;
+    
             try {
-                opcion = Integer.parseInt(scanner.nextLine()) - 1;
-                Gimnasio gimnasioTemp = gimnasios[opcion];
-                Entrenador[] entrenadoresTemp = gimnasioTemp.getEntrenadores();
-                for (int i = 0; i < entrenadoresTemp.length; i++) {
-                    if (!entrenadoresTemp[i].isLider()) {
-                        System.out.printf("\nTe enfrentas a %s!", entrenadoresTemp[i].getNombre());
-                        iniciarCombate(jugador, entrenadoresTemp[i]);
-                    } else if (i == entrenadoresTemp.length && entrenadoresTemp[i].isLider()) {
-                        System.out.printf("\nAhora te enfrentas al líder %s!", entrenadoresTemp[i].getNombre());
-                        iniciarCombate(jugador, entrenadoresTemp[i]);
-                    }
+                opcion = Integer.parseInt(scanner.nextLine());
+            } catch (Exception e) {
+                System.out.println("Por favor, ingresa un número valido");
+                continue;
+            }
+    
+            if (opcion == 0) {
+                System.out.println("¡Gracias por jugar!");
+                continuar = false;
+                break;
+            }
+    
+            if (opcion < 1 || opcion > gimnasios.length) {
+                System.out.println("Opcion invalida. Intenta nuevamente");
+                continue;
+            }
+    
+            Gimnasio gimnasioTemp = gimnasios[opcion - 1];
+            System.out.printf("\nDesafias al %s (%s)\n", gimnasioTemp.getNombre(), gimnasioTemp.getDificultad());
+    
+            Entrenador[] entrenadoresTemp = gimnasioTemp.getEntrenadores();
+    
+            boolean victoriaGimnasio = true;
+    
+            for (int i = 0; i < entrenadoresTemp.length; i++) {
+                Entrenador rival = entrenadoresTemp[i];
+                String tipo = rival.isLider() ? "Lider" : "Entrenador";
+                System.out.printf("\nTe enfrentas al %s %s\n", tipo, rival.getNombre());
+    
+                // Reinicia HP y estado de todos los pokemones de ambos antes del combate
+                restaurarEquipo(jugador);
+                restaurarEquipo(rival);
+    
+                Combate combate = new Combate(jugador, rival, scanner);
+                combate.iniciarCombate();
+    
+                // Si el jugador perdió, termina el gimnasio
+                if (!tienePokemonesVivos(jugador)) {
+                    System.out.println("\nHas perdido el desafio del gimnasio :c");
+                    victoriaGimnasio = false;
+                    break;
                 }
-            } catch (Exception error) {
-                System.out.println("Opción no encontrada. Intenta de nuevo!\n");
+    
+                // Si ganó y aún hay entrenadores por vencer
+                if (i < entrenadoresTemp.length - 1) {
+                    System.out.println("\n¡Has vencido! Preparate para el siguiente combate c:");
+                } else {
+                    System.out.printf("\n¡Has vencido al lider %s y ganado el %s!\n",
+                            rival.getNombre(), gimnasioTemp.getNombre());
+                }
+            }
+    
+            // Si el jugador ganó todo el gimnasio
+            if (victoriaGimnasio) {
+                System.out.println("\n¡Felicidades! Has conquistado este gimnasio.\n");
+            }
+    
+            // Preguntar si desea continuar con otro gimnasio
+            System.out.println("¿Deseas desafiar otro gimnasio? (s/n)");
+            String respuesta = scanner.nextLine().trim().toLowerCase();
+            if (!respuesta.equals("s")) {
+                continuar = false;
+                System.out.println("\n¡Gracias por jugar Pokemon Java Edition! (como el minecraft pero con Pokemon)");
             }
         }
-
+    }
+    
+    /**
+     * Restaura el HP y el estado de todos los pokemones de un entrenador
+     * Se usa entre combates dentro del mismo gimnasio
+     */
+    private void restaurarEquipo(Entrenador entrenador) {
+        for (Pokemon p : entrenador.getPokemones()) {
+            if (p != null) {
+                Stats s = p.getStats();
+                // restaurar HP base
+                s.setHp(100);
+                p.setDebilitado(false);
+            }
+        }
+    }
+    
+    /**
+     * Verifica si el entrenador tiene al menos un pokemon vivo
+     */
+    private boolean tienePokemonesVivos(Entrenador e) {
+        for (Pokemon p : e.getPokemones()) {
+            if (!p.isDebilitado()) return true;
+        }
+        return false;
     }
 
     /**
-     * Hace que el NPC (rival) elija un pokemon aleatorio entre los que tiene.
-     * Este pokemon no puede estar debilitado.
-     * Es el parámetro de pokemonActivo() del NPC.
+     * Hace que el NPC (rival) elija un pokemon aleatorio entre los que tiene
+     * Este pokemon no puede estar debilitado
+     * Es el parametro de pokemonActivo() del NPC
      * @param npc El entrenador NPC
      */
     private void pokemonActivoNpc(Entrenador npc) {
         Random random = new Random();
         Pokemon[] equipo = npc.getPokemones();
-        int indice;
+    
+        // Verificar si tiene alguno disponible
+        boolean tieneVivo = false;
+        for (Pokemon p : equipo) {
+            if (!p.isDebilitado()) {
+                tieneVivo = true;
+                break;
+            }
+        }
+    
+        if (!tieneVivo) {
+            System.out.println(npc.getNombre() + " no tiene mas Pokemones disponibles.");
+            return;
+        }
+    
+        // Elegir un Pokémon no debilitado al azar
         Pokemon pokemonNpc;
-
         do {
-            indice = random.nextInt(3);
+            int indice = random.nextInt(equipo.length);
             pokemonNpc = equipo[indice];
-        } while (!pokemonNpc.isDebilitado());
-
+        } while (pokemonNpc.isDebilitado());
+    
         npc.setPokemonActivo(pokemonNpc);
-        System.out.println("    \n" + npc.getNombre() + " elije " + npc.getPokemonActivo().getNombre() + "!");
+        System.out.println("\n" + npc.getNombre() + " elije " + npc.getPokemonActivo().getNombre() + "!");
     }
 
+
     /**
-     * Asigna el pokemon activo del jugador.
-     * Permite al jugador elegir entre sus 3 pokemones.
-     * El pokemon elegido no puede estar debilitado.
+     * Asigna el pokemon activo del jugador
+     * Permite al jugador elegir entre sus 3 pokemones
+     * El pokemon elegido no puede estar debilitado
      * @param jugador El entrenador jugador
      */
     private void pokemonActivoJugador(Entrenador jugador) {
-        System.out.println("\nElije tu siguiente pokémon (1, 2, 3)");
+        System.out.println("\nElije tu siguiente pokemon (1, 2, 3)");
         Pokemon[] equipo = jugador.getPokemones();
         for (int i = 0; i < equipo.length; i++) {
             System.out.printf("%d. %s\n", i + 1, equipo[i].getNombre());
@@ -339,21 +432,21 @@ public class Menu {
             try {
                 opcion = Integer.parseInt(scanner.nextLine());
                 Pokemon elegido = equipo[opcion - 1];
-                if (elegido.isDebilitado()) { // verifica si está debilitado
-                    System.out.printf("%s está debilitado.\n", elegido.getNombre());
+                if (elegido.isDebilitado()) { // verifica si esta debilitado
+                    System.out.printf("%s esta debilitado.\n", elegido.getNombre());
                     opcion = -1; // volver a pedir
                 } else {
                     jugador.setPokemonActivo(elegido);
                     System.out.printf("%s: %s yo te elijo!\n", jugador.getNombre(), elegido.getNombre());
                 }
             } catch (Exception e) {
-                System.out.println("Ingrese un número (1, 2, 3)");
+                System.out.println("Ingrese un numero (1, 2, 3)");
             }
         }
     }
 
     /**
-     * Muestra las estadísticas del pokemon activo de un entrenador
+     * Muestra las estadisticas del pokemon activo de un entrenador
      * @param entrenador El entrenador del que queremos ver el pokemon
      */
     private void mostrarStats(Entrenador entrenador) {
@@ -363,7 +456,7 @@ public class Menu {
             System.out.printf("\n%s | HP:%d ATK:%d DEF:%d SPD:%d\n",
             activo.getNombre(), s.getHp(), s.getAtk(), s.getDef(), s.getSpd());
         } else {
-            System.out.println(entrenador.getNombre() + " no tiene un pokémon activo.");
+            System.out.println(entrenador.getNombre() + " no tiene un pokemon activo.");
         }
     }
 
@@ -407,7 +500,7 @@ public class Menu {
 
     /**
      * Inicia el combate entre el jugador y el NPC
-     * WIP
+     * Integra la logica completa del sistema de combate
      * @param jugador Entrenador jugador
      * @param npc Entrenador NPC
      */
@@ -415,6 +508,10 @@ public class Menu {
         pokemonActivoJugador(jugador);
         pokemonActivoNpc(npc);
         mostrarStats(jugador);
-        elegirAtaque(jugador.getPokemonActivo(), npc);
+    
+        //Aqui inicia Combate para eleigr ataques, etc
+        Combate combate = new Combate(jugador, npc, scanner);
+        combate.iniciarCombate();
     }
+
 }
