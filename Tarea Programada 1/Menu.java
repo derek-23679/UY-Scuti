@@ -365,6 +365,9 @@ public class Menu {
                 // restaurar HP base
                 s.setHp(100);
                 p.setDebilitado(false);
+                for (Ataque a : p.getAtaques()) {
+                a.restaurarPP(); //restaura PP
+                }
             }
         }
     }

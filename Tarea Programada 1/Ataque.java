@@ -1,7 +1,8 @@
 /**
  * Objeto ataque: recopila los parametros que forman un ataque
+ * Incluye control de PP (puntos de poder) para limitar su uso
  * @author UY Scuti
- * @version 1.0
+ * @version 2.1
  */
 public class Ataque {
     private String nombre;
@@ -16,8 +17,8 @@ public class Ataque {
      * @param nombre Nombre del ataque
      * @param elemento Tipo elemental del ataque
      * @param potencia Potencia del ataque
-     * @param PPmax El numero de usos maximos en un ciclo del ataque
-     * @param precision la probabilidad de acertar el ataque
+     * @param PPmax Nnmero de usos maximos del ataque
+     * @param precision Probabilidad de acertar el ataque
      */
     public Ataque(String nombre, Elemento elemento, int potencia, int PPmax, int precision) {
         this.nombre = nombre;
@@ -28,51 +29,41 @@ public class Ataque {
         this.precision = precision;
     }
 
-    /**
-     * Getter
-     * @return Nombre del ataque
-     */
-    public String getNombre() {
-        return nombre;
+    public String getNombre() { 
+        return nombre; 
+    }
+    public Elemento getElemento() { 
+        return elemento; 
+    }
+    public int getPotencia() { 
+        return potencia; 
+    }
+    public int getPPMax() { 
+        return PPmax; 
+    }
+    public int getPPactual() { 
+        return PPactual; 
+    }
+    public int getPrecision() { 
+        return precision; 
     }
 
     /**
-     * Getter
-     * @return Tipo elemental del ataque
+     * Usa un PP del ataque si hay disponible
+     * @return true si el ataque puede usarse, false si no quedan PP
      */
-    public Elemento getElemento() {
-        return elemento;
+    public boolean usarPP() {
+        if (PPactual > 0) {
+            PPactual--;
+            return true;
+        } else {
+            System.out.println(nombre + " no tiene PP restantes! :c");
+            return false;
+        }
     }
 
-    /**
-     * Getter
-     * @return Potencia del ataque
-     */
-    public int getPotencia() {
-        return potencia;
-    }
-
-    /**
-     * Getter
-     * @return Usos máximos del ataque
-     */
-    public int getPPMax() {
-        return PPmax;
-    }
-
-    /**
-     * Getter
-     * @return Usos restantes del ataque
-     */
-    public int getPPactual() {
-        return PPactual;
-    }
-
-    /**
-     * Getter
-     * @return La probabilidad de acertar el ataque
-     */
-    public int getPrecision() {
-        return precision;
+    /** Restaura los PP al máximo (al final del combate o gimnasio). */
+    public void restaurarPP() {
+        this.PPactual = PPmax;
     }
 }

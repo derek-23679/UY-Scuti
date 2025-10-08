@@ -107,40 +107,53 @@ public class Combate {
     }
 
     /**
-     * Realiza el ataque de un Pokemon a otro y calcula el danio
+     * Realiza el ataque de un pokemon a otro y calcula el danio
+     * Descuenta PP, aplica precision y muestra el ataque usado
      */
     private void atacar(Pokemon atacante, Pokemon defensor, Ataque ataque) {
+        // Verificar PP
+        if (!ataque.usarPP()) {
+            System.out.println(atacante.getNombre() + " no puede usar " + ataque.getNombre() + " (sin PP).");
+            return;
+        }
+    
+        // Comprobacion de precision
         if (random.nextInt(100) >= ataque.getPrecision()) {
             System.out.println("El ataque falló!");
             return;
         }
-
+    
         int nivel = atacante.getNivel();
         int atk = atacante.getStats().getAtk();
         int def = defensor.getStats().getDef();
         int base = ataque.getPotencia();
-
+    
         double daño = (((2 * nivel / 5.0 + 2) * base * atk / def) / 50) + 2;
-
+    
+        // Bonificación de tipo
         for (Elemento e : atacante.getElementos()) {
             if (e.getNombre().equalsIgnoreCase(ataque.getElemento().getNombre())) {
                 daño *= 1.5;
             }
         }
-
+    
+        // Variacin aleatoria del danio
         daño *= (0.85 + (random.nextDouble() * 0.15));
-
+    
+        // Aplicar danio
         int hpRestante = defensor.getStats().getHp() - (int) daño;
         defensor.getStats().setHp(Math.max(0, hpRestante));
-
-        System.out.printf("%s recibe %.0f de daño. (HP restante: %d)\n",
-                defensor.getNombre(), daño, defensor.getStats().getHp());
-
+    
+        System.out.printf("%s usa %s → %.0f de daño. (HP restante: %d, PP: %d/%d)\n",
+                atacante.getNombre(), ataque.getNombre(), daño,
+                defensor.getStats().getHp(), ataque.getPPactual(), ataque.getPPMax());
+    
         if (defensor.getStats().getHp() <= 0) {
             System.out.printf("%s se ha debilitado!\n", defensor.getNombre());
             defensor.setDebilitado(true);
         }
     }
+
 
     private boolean tienePokemonesVivos(Entrenador e) {
         for (Pokemon p : e.getPokemones()) {
@@ -159,8 +172,20 @@ public class Combate {
         }
     }
 
+    /**
+     * El enemigo elige un ataque aleatorio disponible
+     * Muestra en consola cual usara
+     */
     private Ataque enemigoEligeAtaque(Pokemon enemigo) {
         Ataque[] ataques = enemigo.getAtaques();
-        return ataques[random.nextInt(ataques.length)];
+        Ataque ataqueElegido;
+    
+        do {
+            ataqueElegido = ataques[random.nextInt(ataques.length)];
+        } while (ataqueElegido.getPPactual() <= 0);
+    
+        System.out.printf("%s usara %s!\n", enemigo.getNombre(), ataqueElegido.getNombre());
+        enemigo.setAtaqueActivo(ataqueElegido);
+        return ataqueElegido;
     }
 }
