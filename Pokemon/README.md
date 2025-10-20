@@ -1,6 +1,5 @@
 # UY-Scuti
 ## Grupo programación 1
-Cargando...
 
 ## Integrantes:
 
