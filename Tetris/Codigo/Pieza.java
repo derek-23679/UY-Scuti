@@ -8,11 +8,12 @@
 * - la pieza puede rotar: A (contra reloj), D (sentido reloj)
 * - otros controles: S (bajar la pieza unas cuantas casillas), ENTER (colocar la pieza)
 * - la pieza no cae automáticamente
+*
 */
 
 public class Pieza {
     private int[][] forma;
-    private String[] colores;
+    private String[][] formaColor;
 
     public Pieza() {
         definirForma();
@@ -23,7 +24,7 @@ public class Pieza {
     // 1: bloque
     // 0: vacío
     private void definirForma() {
-        switch (numeroAleatorio(5)) { // 5 formas
+        switch (numeroAleatorio(5)) { // 5 formas diferentes
             // Forma línea
             case 1:
                 forma = new int[][] {
@@ -69,11 +70,14 @@ public class Pieza {
         }
     }
 
-    // Genera una lista de colores para emparejar con la forma
+    // formaColor es una matriz que contiene los colores en String de cada bloque.
+    // Donde forma tenga un 1, formaColor tiene un color aleatorio
     private void asignarColores() {
-        colores = new String[4]; // Ya que todas las piezas están compuestas de 4 bloques
-        for (int i = 0; i < colores.length; i++) {
-            colores[i] = colorAleatorio();
+        formaColor = new String[forma.length][forma[0].length];
+        for (int i = 0; i < formaColor.length; i++) {
+            for (int j = 0; i < formaColor[0].length; j++) {
+                formaColor[i][j] = colorAleatorio();
+            }
         }
     }
 
@@ -98,8 +102,5 @@ public class Pieza {
 
     public int[][] getForma() {
         return forma;
-    }
-    public String[] getColores() {
-        return colores;
     }
 }
