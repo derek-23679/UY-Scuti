@@ -20,39 +20,53 @@ public class Tetris {
     private String[][] tableroColor; // Lo mismo que tablero pero con String del color
     
     public Tetris() {
-        tablero = new int[20][10]; // Tablero 10 ancho x 20 alto (o más para manejo de errores)
+        tableroVacio(20, 10); // Tablero 10 ancho x 20 alto (o más para manejo de errores)
         printMatrix();
     }
 
     private void printMatrix() {
         // Marco superior
-        for (int i = 0; i < tablero[0].length; i++) {
-            System.out.print(Color.PURPLEBG + " ");
+        for (int i = 0; i < tablero[0].length + 2; i++) {
+            System.out.print(Color.PURPLE + "=");
         }
 
         for (int i = 0; i < tablero.length; i++) {
-            System.out.println(Color.PURPLEBG + "\n "); // Marco lateral
+            System.out.print(Color.PURPLE + "\n■"); // Marco lateral
 
             for (int j = 0; j < tablero[0].length; j++) {
                 if (tablero[i][j] == 1) {
                     switch (tableroColor[i][j]) {
-                        case "RED": System.out.print(Color.REDBG + " ");
-                        case "GREEN": System.out.print(Color.GREENBG + " ");
-                        case "YELLOW": System.out.print(Color.YELLOWBG + " ");
-                        case "BLUE": System.out.print(Color.BLUEBG + " ");
-                        case "CYAN": System.out.print(Color.CYANBG + " "); 
+                        case "RED": System.out.print(Color.REDBG + "█");
+                        case "GREEN": System.out.print(Color.GREENBG + "█");
+                        case "YELLOW": System.out.print(Color.YELLOWBG + "█");
+                        case "BLUE": System.out.print(Color.BLUEBG + "█");
+                        case "CYAN": System.out.print(Color.CYANBG + "█"); 
                     }
                 } else {
                     System.out.print(Color.RESET + " ");
                 }
             }
 
-            System.out.println(Color.PURPLEBG + " "); // Marco lateral
+            System.out.print(Color.PURPLE + "■"); // Marco lateral
         }
 
         // Marco inferior
-        for (int i = 0; i < tablero[0].length; i++) {
-            System.out.println(Color.PURPLEBG + " ");
+        for (int i = 0; i < tablero[0].length + 2; i++) {
+            if (i == 0) {
+                System.out.println();
+                System.out.print(Color.PURPLE + "=");
+            } else {
+                System.out.print(Color.PURPLE + "=" + Color.RESET);
+            }
+        }
+    }
+
+    private void tableroVacio(int filas, int columnas) {
+        tablero = new int[filas][columnas];
+        for (int i = 0; i < tablero.length; i++) {
+            for (int j = 0; j < tablero[0].length; j++) {
+                tablero[i][j] = 0;
+            }
         }
     }
 }
