@@ -65,6 +65,25 @@ public class Pieza {
         }
     }
 
+    // Constructor que crea una Pieza a partir de una forma ya existente
+    public Pieza(String[][] forma) {
+        this.forma = forma;
+    }
+
+    // Devuelve una nueva matriz con la rotación horaria de la forma actual
+    public String[][] rotarHorario() {
+        String[][] original = this.forma;
+        int h = original.length;
+        int w = original[0].length;
+        String[][] rotada = new String[w][h];
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
+                rotada[j][h - 1 - i] = original[i][j];
+            }
+        }
+        return rotada;
+    }
+
     private int numeroAleatorio(int limite) {
         return (int) (Math.random() * limite) + 1;
     }
