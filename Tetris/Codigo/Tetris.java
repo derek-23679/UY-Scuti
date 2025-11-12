@@ -93,6 +93,7 @@ public class Tetris {
 
     // Método para generar una nueva pieza
     private void generarNuevaPieza() {
+        aplicarGravedad();
         actual = siguiente;
         siguiente = new Pieza();
         filaPieza = 0;
@@ -117,6 +118,31 @@ public class Tetris {
         System.out.print("\033[H\033[2J");
         System.out.flush();
 
+        // Mostrar la siguiente pieza
+        if (siguiente != null) {
+            System.out.println("Siguiente pieza:");
+            String[][] forma = siguiente.getForma();
+            for (int i = 0; i < forma.length; i++) {
+                System.out.print("  ");
+                for (int j = 0; j < forma[i].length; j++) {
+                    if (forma[i][j] != null) {
+                        switch (forma[i][j]) {
+                            case "RED":    System.out.print(Color.RED + "██" + Color.RESET); break;
+                            case "GREEN":  System.out.print(Color.GREEN + "██" + Color.RESET); break;
+                            case "YELLOW": System.out.print(Color.YELLOW + "██" + Color.RESET); break;
+                            case "BLUE":   System.out.print(Color.BLUE + "██" + Color.RESET); break;
+                            case "CYAN":   System.out.print(Color.CYAN + "██" + Color.RESET); break;
+                            default:       System.out.print("??");
+                        }
+                    } else {
+                        System.out.print("  ");
+                    }
+                }
+                System.out.println();
+            }
+            System.out.println();
+        }
+
         // Imprimir borde superior del tablero
         System.out.println("┌" + "──".repeat(tablero[0].length) + "┐");
 
@@ -127,7 +153,7 @@ public class Tetris {
             for (int j = 0; j < tablero[0].length; j++) {
                 String color = null;
 
-                // 1️. Verificar si la pieza actual ocupa esta posicion
+                // 1️. Verificar si la pieza actual ocupa esta posición
                 if (i >= filaPieza && i < filaPieza + pieza.length &&
                     j >= colPieza && j < colPieza + pieza[0].length) {
                     if (pieza[i - filaPieza][j - colPieza] != null) {
@@ -164,39 +190,32 @@ public class Tetris {
     }
 
     public boolean colisiona(String[][] forma, int filaP, int colP) {
-        /*
-         * Comprueba colisión de "forma" situada en (filaP, colP) con:
-         * - límites del tablero
-         * - bloques ya fijados en tablero
-         *
-         * Las celdas null de "forma" se ignoran.
-         */
+        return colisionaRe(forma, filaP, colP, 0, 0);
+    }
+
+    private boolean colisionaRe(String[][] forma, int filaP, int colP, int i, int j) {
         int h = forma.length;
         int w = forma[0].length;
         int filasTab = tablero.length;
         int colsTab = tablero[0].length;
 
-        for (int i = 0; i < h; i++) {
-            for (int j = 0; j < w; j++) {
-                if (forma[i][j] == null) continue;
+        if (i == h) return false;
 
-                int fi = filaP + i;
-                int cj = colP + j;
+        // Pasar a la siguiente fila
+        if (j == w) return colisionaRe(forma, filaP, colP, i + 1, 0);
 
-                // Fuera por izquierda/derecha
-                if (cj < 0 || cj >= colsTab) return true;
+        if (forma[i][j] == null) return colisionaRe(forma, filaP, colP, i, j + 1);
 
-                // Si está por encima del tablero (inicio), no considerar colisión vertical
-                if (fi < 0) continue;
+        int fi = filaP + i;
+        int cj = colP + j;
 
-                // Fuera por abajo
-                if (fi >= filasTab) return true;
+        // Verificación de límites y colisiones
+        if (cj < 0 || cj >= colsTab) return true;
+        if (fi >= filasTab) return true;
+        if (fi >= 0 && tablero[fi][cj] != null) return true;
 
-                // Colisión con bloque fijado
-                if (tablero[fi][cj] != null) return true;
-            }
-        }
-        return false;
+        // Continuar con la siguiente celda
+        return colisionaRe(forma, filaP, colP, i, j + 1);
     }
 
     public void moverPieza(char tecla) {
@@ -264,46 +283,70 @@ public class Tetris {
      *
      */
     private void verificarFilas() {
-        for (int i = tablero.length - 1; i >= 0; i--) {
-            boolean llena = true;
-            java.util.HashMap<String, Integer> colores = new java.util.HashMap<>();
+        verificarFilasRe(tablero.length - 1);
+    }
 
-            for (int j = 0; j < tablero[0].length; j++) {
-                if (tablero[i][j] == null) {
-                    llena = false;
-                    break;
-                }
-                colores.put(tablero[i][j], colores.getOrDefault(tablero[i][j], 0) + 1);
+    private void verificarFilasRe(int fila) {
+        if (fila < 0) return;
+
+        boolean llena = true;
+        java.util.HashMap<String, Integer> colores = new java.util.HashMap<>();
+
+        for (int j = 0; j < tablero[0].length; j++) {
+            if (tablero[fila][j] == null) {
+                llena = false;
+                break;
             }
-
-            if (llena) {
-                // Determinar color dominante
-                String dominante = null;
-                int max = 0;
-                for (var entry : colores.entrySet()) {
-                    if (entry.getValue() > max) {
-                        dominante = entry.getKey();
-                        max = entry.getValue();
-                    }
-                }
-
-                eliminarFila(i);
-                i++;
-                sumarPuntaje(dominante);
-            }
+            colores.put(tablero[fila][j], colores.getOrDefault(tablero[fila][j], 0) + 1);
         }
+
+        if (llena) {
+            String dominante = null;
+            int max = 0;
+            for (var entry : colores.entrySet()) {
+                if (entry.getValue() > max) {
+                    dominante = entry.getKey();
+                    max = entry.getValue();
+                }
+            }
+
+            eliminarFilaRe(fila);
+            sumarPuntaje(dominante);
+
+            // Después de eliminar, volver a revisar la misma fila
+            verificarFilasRe(fila);
+        } else {
+            // Continuar con la fila superior
+            verificarFilasRe(fila - 1);
+        }
+    }
+
+    private void eliminarFilaRe(int fila) {
+        if (fila <= 0) {
+            tablero[0] = new String[tablero[0].length];
+            return;
+        }
+
+        tablero[fila] = java.util.Arrays.copyOf(tablero[fila - 1], tablero[fila - 1].length);
+        eliminarFilaRe(fila - 1); // 👈 llamada recursiva
     }
 
     /**
      *
      * Elimina una fila completa y baja todas las de arriba
-     *
+     * Llama al método aplicarGravedad() para asegurarse de que los bloques sin soporte caigan
+     * 
      */
     private void eliminarFila(int fila) {
         for (int i = fila; i > 0; i--) {
-            tablero[i] = java.util.Arrays.copyOf(tablero[i - 1], tablero[i - 1].length);
+            for (int j = 0; j < tablero[0].length; j++) {
+                tablero[i][j] = tablero[i - 1][j];
+            }
         }
-        tablero[0] = new String[tablero[0].length];
+        // Limpiar la fila superior
+        for (int j = 0; j < tablero[0].length; j++) {
+            tablero[0][j] = null;
+        }
     }
 
     /**
@@ -364,5 +407,23 @@ public class Tetris {
         puntaje += base;
         System.out.println("+" + base + " puntos (color " + color + ")");
         System.out.println("Puntaje total: " + puntaje);
+    }
+
+    private void mostrarSiguiente() {
+        System.out.println("\nSiguiente pieza:");
+        String[][] forma = siguiente.getForma();
+        for (int i = 0; i < forma.length; i++) {
+            for (int j = 0; j < forma[i].length; j++) {
+                if (forma[i][j] != null)
+                    System.out.print("■ "); // o forma[i][j].charAt(0) para ver color inicial
+                else
+                    System.out.print("  ");
+            }
+            System.out.println();
+        }
+    }
+
+    private void aplicarGravedad() {
+        // GRAVEDAD
     }
 }
