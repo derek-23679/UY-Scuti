@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 
 /*
@@ -64,18 +66,22 @@ public class Tetris {
                 break;
             }
 
-            if (entrada.length() == 1) {
-                char tecla = entrada.charAt(0);
+    if (entrada.length() == 1) {
+        char tecla = entrada.charAt(0);
 
-                if (tecla == 'S') {
-                    caerPieza(); 
-                } else {
-                    moverPieza(tecla);
-                }
-            }
+        if (tecla == 'S') {
+            caerPieza(); 
+        } 
+        else if (tecla == 'G') {
+            aplicarGravedad();
         }
+        else {
+            moverPieza(tecla);
+        }
+    }
+            }
 
-        sc.close();
+            sc.close();
     }
 
     // Método para caída hasta el suelo o sobre otra pieza
@@ -334,7 +340,6 @@ public class Tetris {
     /**
      *
      * Elimina una fila completa y baja todas las de arriba
-     * Llama al método aplicarGravedad() para asegurarse de que los bloques sin soporte caigan
      * 
      */
     private void eliminarFila(int fila) {
@@ -343,7 +348,6 @@ public class Tetris {
                 tablero[i][j] = tablero[i - 1][j];
             }
         }
-        // Limpiar la fila superior
         for (int j = 0; j < tablero[0].length; j++) {
             tablero[0][j] = null;
         }
@@ -423,7 +427,77 @@ public class Tetris {
         }
     }
 
+    /*
+     * 
+     * Método para aplicar gravedad a los bloques "flotantes" tras eliminar una columna o fila (bloques que no están conectados a ningún otro bloque ni el suelo)
+     * 
+     * 
+    */
     private void aplicarGravedad() {
-        // GRAVEDAD
+
+        int filas = tablero.length;
+        int cols  = tablero[0].length;
+
+        // Matriz para identificar bloques conectados al suelo
+        boolean[][] conectados = new boolean[filas][cols];
+
+        // BFS desde todos los bloques del suelo
+        Queue<int[]> cola = new LinkedList<>();
+
+        for (int j = 0; j < cols; j++) {
+            if (tablero[filas - 1][j] != null) {
+                conectados[filas - 1][j] = true;
+                cola.add(new int[]{filas - 1, j});
+            }
+        }
+
+        int[][] dirs = {{1,0},{-1,0},{0,1},{0,-1}}; // arriba, abajo, izquierda, derecha (direcciones en las que un bloque puede estar conectado a otro)
+
+        while (!cola.isEmpty()) {
+            int[] pos = cola.poll();
+            int r = pos[0];
+            int c = pos[1];
+
+            for (int[] d : dirs) {
+                int nr = r + d[0];
+                int nc = c + d[1];
+
+                if (nr >= 0 && nr < filas && nc >= 0 && nc < cols) {
+                    if (tablero[nr][nc] != null && !conectados[nr][nc]) {
+                        conectados[nr][nc] = true;
+                        cola.add(new int[]{nr, nc});
+                    }
+                }
+            }
+        }
+
+        String[][] nuevo = new String[filas][cols];
+
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (conectados[i][j]) {
+                    nuevo[i][j] = tablero[i][j];
+                }
+            }
+        }
+
+        for (int i = filas - 1; i >= 0; i--) {
+            for (int j = 0; j < cols; j++) {
+
+                if (tablero[i][j] != null && !conectados[i][j]) {
+
+                    int r = i;
+
+                    // buscar hasta dónde puede caer
+                    while (r + 1 < filas && nuevo[r + 1][j] == null) {
+                        r++;
+                    }
+
+                    nuevo[r][j] = tablero[i][j];
+                }
+            }
+        }
+
+        tablero = nuevo;
     }
 }
