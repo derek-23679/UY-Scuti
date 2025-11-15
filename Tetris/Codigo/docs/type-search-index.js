@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html","k":"18"},{"p":"<Unnamed>","l":"Arbol"},{"p":"<Unnamed>","l":"CalculadorPuntaje"},{"p":"<Unnamed>","l":"Color"},{"p":"<Unnamed>","l":"Main"},{"p":"<Unnamed>","l":"Arbol.Nodo"},{"p":"<Unnamed>","l":"Pieza"},{"p":"<Unnamed>","l":"Tetris"}];updateSearchResults();

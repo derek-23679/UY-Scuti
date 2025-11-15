@@ -1,23 +1,28 @@
-/*
-* Reglas:
-* 
-* - mínimo 4 formas del tetris clásico
-* - cada pieza tiene diferentes colores
-* - los colores son aleatorios
-* - el puntaje recibido al romper una fila se determina en base a los colores y su frecuencia en el árbol autobalanceado
-* - la pieza puede rotar: A (contra reloj), D (sentido reloj)
-* - otros controles: S (bajar la pieza unas cuantas casillas), ENTER (colocar la pieza)
-* - la pieza no cae automáticamente
-*
-*/
-
+/**
+ * Representa una pieza del juego Tetris con forma y color aleatorios
+ *
+ * Reglas de implementación:
+ * - Mínimo 4 formas del tetris clásico
+ * - Cada pieza tiene diferentes colores
+ * - Los colores son aleatorios
+ * - El puntaje se determina en base a los colores y su frecuencia en el árbol autobalanceado
+ * - La pieza puede rotar: A (contra reloj), D (sentido reloj)
+ * - Otros controles: S (bajar la pieza), ENTER (colocar la pieza)
+ * - La pieza no cae automáticamente
+ */
 public class Pieza {
     private String[][] forma;
 
+    /**
+     * Constructor que crea una pieza con forma y color aleatorios
+     */
     public Pieza() {
         definirForma();
     }
 
+    /**
+     * Define la forma de la pieza aleatoriamente entre 5 tipos diferentes
+     */
     private void definirForma() {
         switch (numeroAleatorio(5)) {
             // Forma línea
@@ -29,7 +34,7 @@ public class Pieza {
                     {colorAleatorio()}
                 };
                 break;
-            
+           
             // Forma cuadrado
             case 2:
                 forma = new String[][] {
@@ -54,7 +59,7 @@ public class Pieza {
                     {colorAleatorio(), colorAleatorio(), colorAleatorio()}
                 };
                 break;
-            
+           
             // Forma zigzag
             case 5:
                 forma = new String[][] {
@@ -65,12 +70,18 @@ public class Pieza {
         }
     }
 
-    // Constructor que crea una Pieza a partir de una forma ya existente
+    /**
+     * Constructor que crea una Pieza a partir de una forma ya existente
+     * @param forma Matriz que define la forma de la pieza
+     */
     public Pieza(String[][] forma) {
         this.forma = forma;
     }
 
-    // Devuelve una nueva matriz con la rotación horaria de la forma actual
+    /**
+     * Devuelve una nueva matriz con la rotación horaria de la forma actual
+     * @return Matriz rotada 90 grados en sentido horario
+     */
     public String[][] rotarHorario() {
         String[][] original = this.forma;
         int h = original.length;
@@ -84,10 +95,19 @@ public class Pieza {
         return rotada;
     }
 
+    /**
+     * Genera un número aleatorio dentro del límite especificado
+     * @param limite Límite superior
+     * @return Número aleatorio entre 1 y límite
+     */
     private int numeroAleatorio(int limite) {
         return (int) (Math.random() * limite) + 1;
     }
 
+    /**
+     * Selecciona un color aleatorio de la paleta disponible
+     * @return Nombre del color aleatorio (RED, GREEN, YELLOW, BLUE, CYAN)
+     */
     private String colorAleatorio() {
         switch (numeroAleatorio(5)) {
             case 1: return "RED";
@@ -99,6 +119,10 @@ public class Pieza {
         }
     }
 
+    /**
+     * Obtiene la forma actual de la pieza
+     * @return Matriz que representa la forma de la pieza
+     */
     public String[][] getForma() {
         return forma;
     }
