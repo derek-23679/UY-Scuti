@@ -2,34 +2,36 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 
-/*
-*
-* Métodos
-* 1. romper fila (horizontal y vertical)
-* 2. completar fila
-* 3. verificar color dominante
-* 4. regla del combo: se rompen consecutivamente filas del mismo color dominante, un combo por fila e.g. x2 x3 x4
-* 5. Colocar pieza
-* 6. Game over si se pasa de altura (20).
-* Se eliminan de abajo para arriba para cálculo de puntaje
-* Tomar en cuenta colisiones: bordes de la matriz y otros bloques colocados
-* Cuando se rompe fila bajar las piezas de arriba (si es horizontal)
-* Puntaje siempre visible
-* FILA VERTICAL DE 4 MISMO COLOR ROMPE FILA
-* 
-*/
-
+/**
+ * Clase principal del juego Tetris que maneja toda la lógica del juego
+ *
+ * Métodos principales:
+ * 1. romper fila (horizontal y vertical)
+ * 2. completar fila
+ * 3. verificar color dominante
+ * 4. regla del combo: se rompen consecutivamente filas del mismo color dominante, un combo por fila e.g. x2 x3 x4
+ * 5. Colocar pieza
+ * 6. Game over si se pasa de altura (20).
+ * Se eliminan de abajo para arriba para cálculo de puntaje
+ * Tomar en cuenta colisiones: bordes de la matriz y otros bloques colocados
+ * Cuando se rompe fila bajar las piezas de arriba (si es horizontal)
+ * Puntaje siempre visible
+ * FILA VERTICAL DE 4 MISMO COLOR ROMPE FILA
+ */
 public class Tetris {
     private String[][] tablero;
     private Pieza actual;
     private Pieza siguiente;
-    private int filaPieza;   
+    private int filaPieza;  
     private int colPieza;    
     private int puntaje;
     private String ultimoColorCombo;
     private int comboActual;
-    private CalculadorPuntaje calculadorPuntaje; // Nuevo: para usar árbol de frecuencias
+    private CalculadorPuntaje calculadorPuntaje;
 
+    /**
+     * Constructor principal que inicializa el juego de Tetris
+     */
     public Tetris() {
         tablero = new String[20][10];
         actual = new Pieza();
@@ -39,7 +41,8 @@ public class Tetris {
         puntaje = 0;
         ultimoColorCombo = "";
         comboActual = 1;
-        calculadorPuntaje = new CalculadorPuntaje(); // Inicializar calculador con árbol
+        /** Inicializar calculador con árbol */
+        calculadorPuntaje = new CalculadorPuntaje();
 
         System.out.println("╔═════════════════════════════╗");
         System.out.println("║     * T  E  T  R  I  S *    ║");
@@ -60,7 +63,8 @@ public class Tetris {
             if (sc.hasNextLine()) {
                 entrada = sc.nextLine().trim().toUpperCase();
             } else {
-                entrada = "S"; // Bajar pieza
+                /** Bajar pieza */
+                entrada = "S";
             }
 
             if (entrada.equals("Q")) {
@@ -72,7 +76,7 @@ public class Tetris {
                 char tecla = entrada.charAt(0);
 
                 if (tecla == 'S') {
-                    caerPieza(); 
+                    caerPieza();
                 } else {
                     moverPieza(tecla);
                 }
@@ -81,7 +85,9 @@ public class Tetris {
         sc.close();
     }
 
-    // Método para caída hasta el suelo o sobre otra pieza
+    /**
+     * Método para caída hasta el suelo o sobre otra pieza
+     */
     private void caerPieza() {
         String[][] forma = actual.getForma();
 
@@ -90,18 +96,22 @@ public class Tetris {
             filaPieza++;
         }
 
-        fijarPieza();          // fija la pieza en el tablero
-        generarNuevaPieza();   // crea una nueva pieza arriba
+        /** fija la pieza en el tablero */
+        fijarPieza();
+        /** crea una nueva pieza arriba */
+        generarNuevaPieza();
     }
 
-    // Método para generar una nueva pieza
+    /**
+     * Método para generar una nueva pieza
+     */
     private void generarNuevaPieza() {
         actual = siguiente;
         siguiente = new Pieza();
         filaPieza = 0;
         colPieza = tablero[0].length / 2 - 1;
 
-        // Si la nueva pieza colisiona al aparecer, termina el juego
+        /** Si la nueva pieza colisiona al aparecer, termina el juego */
         if (colisiona(actual.getForma(), filaPieza, colPieza)) {
             mostrarTablero(actual.getForma(), filaPieza, colPieza);
             System.out.println("FIN DEL JUEGO (tablero lleno)");
@@ -109,36 +119,35 @@ public class Tetris {
         }
     }
 
+    /**
+     * Este método imprime el tablero completo en consola,
+     * mostrando tanto las piezas ya fijadas en el tablero
+     * como la pieza actual "flotante"
+     */
     public void mostrarTablero(String[][] pieza, int filaPieza, int colPieza) {
-        /*
-         * Este método imprime el tablero completo en consola,
-         * mostrando tanto las piezas ya fijadas en el tablero
-         * como la pieza actual "flotante"
-         */
-
-        // Limpia pantalla
+        /** Limpia pantalla */
         System.out.print("\033[H\033[2J");
         System.out.flush();
 
         int filaGhost = calcularFilaDestino();
 
-        // Mostrar la siguiente pieza
+        /** Mostrar la siguiente pieza */
         if (siguiente != null) {
             mostrarSiguiente();
         }
 
-        // Imprimir borde superior del tablero
+        /** Imprimir borde superior del tablero */
         System.out.println("╔" + "══".repeat(tablero[0].length) + "╗");
 
-        // Recorremos todo el tablero (20x10)
+        /** Recorremos todo el tablero (20x10) */
         for (int i = 0; i < tablero.length; i++) {
-            System.out.print("║"); // borde izquierdo
+            System.out.print("║"); /** borde izquierdo */
 
             for (int j = 0; j < tablero[0].length; j++) {
                 String color = null;
                 boolean esGhost = false;
 
-                // Verificar si la pieza actual ocupa esta posición
+                /** Verificar si la pieza actual ocupa esta posición */
                 if (i >= filaPieza && i < filaPieza + pieza.length &&
                     j >= colPieza && j < colPieza + pieza[0].length) {
                     if (pieza[i - filaPieza][j - colPieza] != null) {
@@ -146,7 +155,7 @@ public class Tetris {
                     }
                 }
 
-                // Marca las casillas donde cae la pieza
+                /** Marca las casillas donde cae la pieza */
                 if (color == null && i >= filaGhost && i < filaGhost + pieza.length &&
                     j >= colPieza && j < colPieza + pieza[0].length) {
                     if (pieza[i - filaGhost][j - colPieza] != null) {
@@ -155,12 +164,12 @@ public class Tetris {
                     }
                 }
 
-                // Si no hay pieza actual, usar el bloque fijo del tablero
+                /** Si no hay pieza actual, usar el bloque fijo del tablero */
                 if (color == null && !esGhost) {
                     color = tablero[i][j];
                 }
 
-                // Dibujar celda (vacía o con color)
+                /** Dibujar celda (vacía o con color) */
                 if (color == null) {
                     System.out.print("··");
                 } else {
@@ -168,10 +177,10 @@ public class Tetris {
                 }
             }
 
-            System.out.println("║"); // borde derecho
+            System.out.println("║"); /** borde derecho */
         }
 
-        // Borde inferior
+        /** Borde inferior */
         System.out.println("╚" + "══".repeat(tablero[0].length) + "╝");
         System.out.println("\nPUNTAJE ACTUAL: " + puntaje);
     }
@@ -188,7 +197,7 @@ public class Tetris {
 
         if (i == h) return false;
 
-        // Pasar a la siguiente fila
+        /** Pasar a la siguiente fila */
         if (j == w) return colisionaRe(forma, filaP, colP, i + 1, 0);
 
         if (forma[i][j] == null) return colisionaRe(forma, filaP, colP, i, j + 1);
@@ -196,20 +205,20 @@ public class Tetris {
         int fi = filaP + i;
         int cj = colP + j;
 
-        // Verificación de límites y colisiones
+        /** Verificación de límites y colisiones */
         if (cj < 0 || cj >= colsTab) return true;
         if (fi >= filasTab) return true;
         if (fi >= 0 && tablero[fi][cj] != null) return true;
 
-        // Continuar con la siguiente celda
+        /** Continuar con la siguiente celda */
         return colisionaRe(forma, filaP, colP, i, j + 1);
     }
 
+    /**
+     * Mueve o rota la pieza actual.
+     * Teclas: A=izq, D=der, S=bajar, W=rotar horario.
+     */
     public void moverPieza(char tecla) {
-        /*
-         * Mueve o rota la pieza actual.
-         * Teclas: A=izq, D=der, S=bajar, W=rotar horario.
-         */
         int filaPrev = filaPieza;
         int colPrev = colPieza;
 
@@ -219,7 +228,7 @@ public class Tetris {
         } else if (t == 'D') {
             colPieza++;
         } else if (t == 'W') {
-            // Intentar rotar: obtener forma rotada y aplicar si no colisiona
+            /** Intentar rotar: obtener forma rotada y aplicar si no colisiona */
             String[][] formaRot = actual.rotarHorario();
             if (!colisiona(formaRot, filaPieza, colPieza)) {
                 actual = new Pieza(formaRot);
@@ -227,11 +236,11 @@ public class Tetris {
             mostrarTablero(actual.getForma(), filaPieza, colPieza);
             return;
         } else {
-            // tecla no reconocida; no pasa nada
+            /** tecla no reconocida; no pasa nada */
             return;
         }
 
-        // Validar colisión tras el movimiento
+        /** Validar colisión tras el movimiento */
         if (colisiona(actual.getForma(), filaPieza, colPieza)) {
             filaPieza = filaPrev;
             colPieza = colPrev;
@@ -241,16 +250,16 @@ public class Tetris {
     }
 
     private void fijarPieza() {
-        String[][] forma = actual.getForma(); // obtenemos la forma de la pieza actual
+        String[][] forma = actual.getForma(); /** obtenemos la forma de la pieza actual */
 
-        // Recorremos la matriz de la pieza
+        /** Recorremos la matriz de la pieza */
         for (int i = 0; i < forma.length; i++) {
             for (int j = 0; j < forma[i].length; j++) {
                 if (forma[i][j] != null && !forma[i][j].isEmpty()) {
                     int filaTablero = filaPieza + i;
                     int colTablero = colPieza + j;
 
-                    // Verificamos que esté dentro de los límites del tablero
+                    /** Verificamos que esté dentro de los límites del tablero */
                     if (filaTablero >= 0 && filaTablero < tablero.length &&
                         colTablero >= 0 && colTablero < tablero[0].length) {
                         tablero[filaTablero][colTablero] = forma[i][j];
@@ -259,7 +268,7 @@ public class Tetris {
             }
         }
 
-        // Actualizar árbol de frecuencias después de fijar pieza
+        /** Actualizar árbol de frecuencias después de fijar pieza */
         calculadorPuntaje.actualizarFrecuencias(tablero);
 
         if (verificarFilas() || verificarColumnas()) {
@@ -268,9 +277,7 @@ public class Tetris {
     }
 
     /**
-     * 
      * Verifica si hay filas completas y las elimina, aplicando puntaje segun el color dominante y combos
-     *
      */
     private boolean verificarFilas() {
         return verificarFilasRe(tablero.length - 1, false);
@@ -305,10 +312,10 @@ public class Tetris {
             eliminarFilaRe(fila);
             sumarPuntaje(dominante);
 
-            // Después de eliminar, volver a revisar la misma fila
-            return verificarFilasRe(fila, true); // Se rompieron bloques
+            /** Después de eliminar, volver a revisar la misma fila */
+            return verificarFilasRe(fila, true); /** Se rompieron bloques */
         } else {
-            // Continuar con la fila superior
+            /** Continuar con la fila superior */
             return verificarFilasRe(fila - 1, rompioBloques);
         }
     }
@@ -320,14 +327,13 @@ public class Tetris {
         }
 
         tablero[fila] = java.util.Arrays.copyOf(tablero[fila - 1], tablero[fila - 1].length);
-        eliminarFilaRe(fila - 1); // llamada recursiva
+        /** llamada recursiva */
+        eliminarFilaRe(fila - 1);
         calculadorPuntaje.actualizarFrecuencias(tablero);
     }
 
     /**
-     *
      * Elimina una fila completa y baja todas las de arriba
-     * 
      */
     private void eliminarFila(int fila) {
         for (int i = fila; i > 0; i--) {
@@ -341,9 +347,7 @@ public class Tetris {
     }
 
     /**
-     *
      * Revisa si hay 4 bloques del mismo color en columna y los elimina
-     *
      */
     private boolean verificarColumnas() {
         boolean rompioBloques = false;
@@ -375,16 +379,14 @@ public class Tetris {
     }
 
     /**
-     *
      * Aumenta el puntaje segun el color dominante y combos consecutivos
-     * MODIFICADO: Ahora usa árbol de frecuencias para calcular puntaje basado en rareza
-     *
+     * Usa árbol de frecuencias para calcular puntaje basado en rareza
      */
     private void sumarPuntaje(String color) {
-        // CAMBIO: Usar calculador con árbol en lugar de valores fijos
+        /** Usa calculador con árbol */
         int base = calculadorPuntaje.calcularPuntajePorColor(color);
 
-        // Combo por color consecutivo
+        /** Combo por color consecutivo */
         if (color.equals(ultimoColorCombo)) {
             comboActual++;
             base *= comboActual;
@@ -420,12 +422,12 @@ public class Tetris {
      * Gravedad de los bloques
      */
     private void aplicarGravedad() {
-        // Revisa de abajo hacia arriba (excepto la última fila)
+        /** Revisa de abajo hacia arriba (excepto la última fila) */
         for (int i = tablero.length - 2; i >= 0; i--) {
             for (int j = 0; j < tablero[0].length; j++) {
-                // Hay bloque y la fila de abajo está vacía
+                /** Hay bloque y la fila de abajo está vacía */
                 if (tablero[i][j] != null && tablero[i + 1][j] == null) {
-                    // Bajar bloque una posición
+                    /** Bajar bloque una posición */
                     tablero[i + 1][j] = tablero[i][j];
                     tablero[i][j] = null;
                 }
@@ -460,12 +462,12 @@ public class Tetris {
      */
     public int calcularFilaDestino() {
         int filaGhost = filaPieza;
-        
-        // Bajar hasta que colisione
+       
+        /** Bajar hasta que colisione */
         while (!colisiona(actual.getForma(), filaGhost + 1, colPieza)) {
             filaGhost++;
         }
-        
+       
         return filaGhost;
     }
 }
