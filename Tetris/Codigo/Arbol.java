@@ -44,9 +44,10 @@ public class Arbol {
     }
     
     /**
-     * Método recursivo para insertar un color
+     * Método recursivo para insertar un color manteniendo el balance del árbol
      * @param nodo Nodo actual de la recursión
      * @param color El color a insertar
+     * @return El nodo actualizado después de la inserción
      */
     private Nodo insertarRecursivo(Nodo nodo, String color) {
         if (nodo == null) {
@@ -91,16 +92,31 @@ public class Arbol {
         return nodo;
     }
     
+    /**
+     * Obtiene la altura de un nodo
+     * @param nodo El nodo a consultar
+     * @return La altura del nodo, 0 si es nulo
+     */
     private int obtenerAltura(Nodo nodo) {
         if (nodo == null) return 0;
         return nodo.altura;
     }
     
+    /**
+     * Calcula el factor de balance de un nodo
+     * @param nodo El nodo a evaluar
+     * @return Diferencia entre altura izquierda y derecha
+     */
     private int obtenerBalance(Nodo nodo) {
         if (nodo == null) return 0;
         return obtenerAltura(nodo.izquierdo) - obtenerAltura(nodo.derecho);
     }
     
+    /**
+     * Realiza una rotación simple a la derecha
+     * @param y El nodo desbalanceado
+     * @return El nuevo nodo raíz después de la rotación
+     */
     private Nodo rotarDerecha(Nodo y) {
         Nodo x = y.izquierdo;
         Nodo B = x.derecho;
@@ -114,6 +130,11 @@ public class Arbol {
         return x;
     }
     
+    /**
+     * Realiza una rotación simple a la izquierda
+     * @param x El nodo desbalanceado
+     * @return El nuevo nodo raíz después de la rotación
+     */
     private Nodo rotarIzquierda(Nodo x) {
         Nodo y = x.derecho;
         Nodo B = y.izquierdo;
@@ -127,10 +148,21 @@ public class Arbol {
         return y;
     }
     
+    /**
+     * Obtiene la frecuencia de un color en el árbol
+     * @param color El color a buscar
+     * @return La frecuencia del color, 0 si no existe
+     */
     public int obtenerFrecuencia(String color) {
         return buscarFrecuencia(raiz, color);
     }
     
+    /**
+     * Búsqueda recursiva de la frecuencia de un color
+     * @param nodo Nodo actual de la búsqueda
+     * @param color Color a buscar
+     * @return Frecuencia del color encontrado
+     */
     private int buscarFrecuencia(Nodo nodo, String color) {
         if (nodo == null) return 0;
         
@@ -145,6 +177,9 @@ public class Arbol {
         }
     }
     
+    /**
+     * Vacía el árbol completamente
+     */
     public void limpiar() {
         raiz = null;
     }
