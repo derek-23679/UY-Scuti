@@ -29,7 +29,6 @@ public class Tetris {
     private String ultimoColorCombo;
     private int comboActual;
     private CalculadorPuntaje calculadorPuntaje; // Nuevo: para usar árbol de frecuencias
-    private boolean cambioPuntaje;
 
     public Tetris() {
         tablero = new String[20][10];
@@ -41,7 +40,6 @@ public class Tetris {
         ultimoColorCombo = "";
         comboActual = 1;
         calculadorPuntaje = new CalculadorPuntaje(); // Inicializar calculador con árbol
-        cambioPuntaje = false;
 
         System.out.println("╔═════════════════════════════╗");
         System.out.println("║     * T  E  T  R  I  S *    ║");
@@ -264,13 +262,8 @@ public class Tetris {
         // Actualizar árbol de frecuencias después de fijar pieza
         calculadorPuntaje.actualizarFrecuencias(tablero);
 
-        // Revisa las lineas y columnas despues de colocar una pieza 
-        verificarFilas();
-        verificarColumnas();
-
-        if (cambioPuntaje) {
+        if (verificarFilas() || verificarColumnas()) {
             aplicarGravedad();
-            cambioPuntaje = false;
         }
     }
 
@@ -279,12 +272,14 @@ public class Tetris {
      * Verifica si hay filas completas y las elimina, aplicando puntaje segun el color dominante y combos
      *
      */
-    private void verificarFilas() {
-        verificarFilasRe(tablero.length - 1);
+    private boolean verificarFilas() {
+        return verificarFilasRe(tablero.length - 1, false);
     }
 
-    private void verificarFilasRe(int fila) {
-        if (fila < 0) return;
+    private boolean verificarFilasRe(int fila, boolean rompioBloques) {
+        if (fila < 0) {
+            return rompioBloques;
+        }
 
         boolean llena = true;
         java.util.HashMap<String, Integer> colores = new java.util.HashMap<>();
@@ -311,10 +306,10 @@ public class Tetris {
             sumarPuntaje(dominante);
 
             // Después de eliminar, volver a revisar la misma fila
-            verificarFilasRe(fila);
+            return verificarFilasRe(fila, true); // Se rompieron bloques
         } else {
             // Continuar con la fila superior
-            verificarFilasRe(fila - 1);
+            return verificarFilasRe(fila - 1, rompioBloques);
         }
     }
 
@@ -350,7 +345,8 @@ public class Tetris {
      * Revisa si hay 4 bloques del mismo color en columna y los elimina
      *
      */
-    private void verificarColumnas() {
+    private boolean verificarColumnas() {
+        boolean rompioBloques = false;
         for (int j = 0; j < tablero[0].length; j++) {
             int contador = 1;
             for (int i = 1; i < tablero.length; i++) {
@@ -360,6 +356,7 @@ public class Tetris {
                         String color = tablero[i][j];
                         eliminarColumnaVertical(i, j);
                         sumarPuntaje(color);
+                        rompioBloques = true;
                         break;
                     }
                 } else {
@@ -367,6 +364,7 @@ public class Tetris {
                 }
             }
         }
+        return rompioBloques;
     }
 
     private void eliminarColumnaVertical(int i, int j) {
@@ -397,7 +395,6 @@ public class Tetris {
         }
 
         puntaje += base;
-        cambioPuntaje = true;
 
         System.out.println("+" + base + " puntos (color " + color + ")");
         System.out.println("Puntaje total: " + puntaje);
