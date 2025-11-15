@@ -13,6 +13,8 @@ C5H687 - Cristian Moya Portalanza
 ## Descripción:
 
 * Características (Objetivo y alcance)
+
+
 **Objetivo:** Tetris en consola con sistema de puntuación basado en un árbol de frecuencias autobalanceado.
 
 **Alcance:**
@@ -24,7 +26,10 @@ C5H687 - Cristian Moya Portalanza
 - Ghost Piece
 - Gravedad tras limpiar fila/columna
 
+
 * Instrucciones de uso (Cómo compilar y ejecutar)
+
+
 **Requisitos:** Java JDK
 
 **Compilación:**
@@ -40,11 +45,16 @@ C5H687 - Cristian Moya Portalanza
 - S: Bajar pieza (se coloca)
 - Q: Salir del juego
 
+
 * Diseño (Decisiones de diseño, 1-2 párrafos, explicar estructura POO)
 Está diseñado con la estructura POO en mente, las clases están definidas de manera que las responsabilidades estén separadas. **Arbol** se encarga de contar la frecuencia en la que aparecen los colores y los almacena en un árbol binario autobalanceado (izquierda y derecha) de ahí sale el sistema de puntuación.
+
 **CalculadorPuntaje** asigna los puntos otorgados por cada color según su frecuencia. **Color** tiene referencias para los print a color. **Main** es el punto de entrada del programa. Finalmente, **Tetris** es donde se programó la mayoría de la lógica del código, no está tan bien segmentado, tiene todos los métodos que involucren el tablero (mostrar la pieza, romper filas/columnas, Ghost Piece, mensajes, etc).
 
+
 * Limitaciones y futuro
+
+
 **Limitaciones:**
 - Algunos mensajes están muy básicos
 - La gravedad no está refinada (está raro el sistema que baja los bloques)
