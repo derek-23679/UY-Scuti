@@ -1,17 +1,53 @@
 /**
- * Árbol autobalanceado para frecuencias de colores
+ * Árbol autobalanceado para contar frecuencias de colores
  */
 public class Arbol {
+
+    /**
+     * Nodo del árbol
+     */
+    private class Nodo {
+        String color;
+        int frecuencia;
+        int altura;
+        Nodo izquierdo;
+        Nodo derecho;
+
+        /**
+         * Constructor de Nodo
+         * @param color El color que contiene el nodo
+         */
+        public Nodo(String color) {
+            this.color = color;
+            this.frecuencia = 1;
+            this.altura = 1;
+            this.izquierdo = null;
+            this.derecho = null;
+        }
+    }
+
     private Nodo raiz;
     
+    /**
+     * Constructor de Arbol
+     */
     public Arbol() {
         this.raiz = null;
     }
     
+    /**
+     * Inserta un color en el árbol o incrementa su frecuencia si ya existe
+     * @param color El color a insertar
+     */
     public void insertar(String color) {
         raiz = insertarRecursivo(raiz, color);
     }
     
+    /**
+     * Método recursivo para insertar un color
+     * @param nodo Nodo actual de la recursión
+     * @param color El color a insertar
+     */
     private Nodo insertarRecursivo(Nodo nodo, String color) {
         if (nodo == null) {
             return new Nodo(color);
