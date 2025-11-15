@@ -41,14 +41,19 @@ public class Tetris {
         comboActual = 1;
         calculadorPuntaje = new CalculadorPuntaje(); // Inicializar calculador con árbol
 
-        System.out.println("Controles: A=Izq | D=Der | W=Rotar | S=Caer | Q=Salir\n");
+        System.out.println("╔═════════════════════════════╗");
+        System.out.println("║     * T  E  T  R  I  S *    ║");
+        System.out.println("╚═════════════════════════════╝");
 
         java.util.Scanner sc = new java.util.Scanner(System.in);
 
         // Bucle principal con gravedad automatica
         while (true) {
             mostrarTablero(actual.getForma(), filaPieza, colPieza);
-            System.out.print("\nMover pieza (A/D/W/S o Q para salir): ");
+
+            System.out.println("\n┌─ CONTROLES ──────────────────────────────┐");
+            System.out.println("│ A: ← │ D: → │ W: ROTAR │ S: ↓ │ Q: Salir │");
+            System.out.println("└──────────────────────────────────────────┘");
 
             long start = System.currentTimeMillis();
             String entrada = "";
@@ -126,42 +131,25 @@ public class Tetris {
         System.out.print("\033[H\033[2J");
         System.out.flush();
 
+        int filaGhost = calcularFilaDestino();
+
         // Mostrar la siguiente pieza
         if (siguiente != null) {
-            System.out.println("Siguiente pieza:");
-            String[][] forma = siguiente.getForma();
-            for (int i = 0; i < forma.length; i++) {
-                System.out.print("  ");
-                for (int j = 0; j < forma[i].length; j++) {
-                    if (forma[i][j] != null) {
-                        switch (forma[i][j]) {
-                            case "RED":    System.out.print(Color.RED + "██" + Color.RESET); break;
-                            case "GREEN":  System.out.print(Color.GREEN + "██" + Color.RESET); break;
-                            case "YELLOW": System.out.print(Color.YELLOW + "██" + Color.RESET); break;
-                            case "BLUE":   System.out.print(Color.BLUE + "██" + Color.RESET); break;
-                            case "CYAN":   System.out.print(Color.CYAN + "██" + Color.RESET); break;
-                            default:       System.out.print("??");
-                        }
-                    } else {
-                        System.out.print("  ");
-                    }
-                }
-                System.out.println();
-            }
-            System.out.println();
+            mostrarSiguiente();
         }
 
         // Imprimir borde superior del tablero
-        System.out.println("┌" + "──".repeat(tablero[0].length) + "┐");
+        System.out.println("╔" + "══".repeat(tablero[0].length) + "╗");
 
         // Recorremos todo el tablero (20x10)
         for (int i = 0; i < tablero.length; i++) {
-            System.out.print("│"); // borde izquierdo
+            System.out.print("║"); // borde izquierdo
 
             for (int j = 0; j < tablero[0].length; j++) {
                 String color = null;
+                boolean esGhost = false;
 
-                // 1️. Verificar si la pieza actual ocupa esta posición
+                // Verificar si la pieza actual ocupa esta posición
                 if (i >= filaPieza && i < filaPieza + pieza.length &&
                     j >= colPieza && j < colPieza + pieza[0].length) {
                     if (pieza[i - filaPieza][j - colPieza] != null) {
@@ -169,31 +157,33 @@ public class Tetris {
                     }
                 }
 
-                // 2️. Si no hay pieza actual, usar el bloque fijo del tablero
-                if (color == null) {
+                // Marca las casillas donde cae la pieza
+                if (color == null && i >= filaGhost && i < filaGhost + pieza.length &&
+                    j >= colPieza && j < colPieza + pieza[0].length) {
+                    if (pieza[i - filaGhost][j - colPieza] != null) {
+                        color = pieza[i - filaGhost][j - colPieza];
+                        esGhost = true;
+                    }
+                }
+
+                // Si no hay pieza actual, usar el bloque fijo del tablero
+                if (color == null && !esGhost) {
                     color = tablero[i][j];
                 }
 
-                // 3️. Dibujar celda (vacía o con color)
+                // Dibujar celda (vacía o con color)
                 if (color == null) {
-                    System.out.print("  ");
+                    System.out.print("··");
                 } else {
-                    switch (color) {
-                        case "RED":    System.out.print(Color.RED + "██" + Color.RESET); break;
-                        case "GREEN":  System.out.print(Color.GREEN + "██" + Color.RESET); break;
-                        case "YELLOW": System.out.print(Color.YELLOW + "██" + Color.RESET); break;
-                        case "BLUE":   System.out.print(Color.BLUE + "██" + Color.RESET); break;
-                        case "CYAN":   System.out.print(Color.CYAN + "██" + Color.RESET); break;
-                        default:       System.out.print("??");
-                    }
+                    System.out.print(imprimirBloque(color, esGhost));
                 }
             }
 
-            System.out.println("│"); // borde derecho
+            System.out.println("║"); // borde derecho
         }
 
         // Borde inferior
-        System.out.println("└" + "──".repeat(tablero[0].length) + "┘");
+        System.out.println("╚" + "══".repeat(tablero[0].length) + "╝");
         System.out.println("\nPUNTAJE ACTUAL: " + puntaje);
     }
 
@@ -339,7 +329,7 @@ public class Tetris {
         }
 
         tablero[fila] = java.util.Arrays.copyOf(tablero[fila - 1], tablero[fila - 1].length);
-        eliminarFilaRe(fila - 1); // 👈 llamada recursiva
+        eliminarFilaRe(fila - 1); // llamada recursiva
     }
 
     /**
@@ -414,17 +404,19 @@ public class Tetris {
     }
 
     private void mostrarSiguiente() {
-        System.out.println("\nSiguiente pieza:");
+        System.out.println("\n== SIGUIENTE ==");
         String[][] forma = siguiente.getForma();
         for (int i = 0; i < forma.length; i++) {
             for (int j = 0; j < forma[i].length; j++) {
-                if (forma[i][j] != null)
-                    System.out.print("■ "); // o forma[i][j].charAt(0) para ver color inicial
-                else
+                if (forma[i][j] != null) {
+                    System.out.print(imprimirBloque(forma[i][j], false));
+                } else {
                     System.out.print("  ");
+                }
             }
             System.out.println();
         }
+        System.out.println();
     }
 
     /*
@@ -499,5 +491,41 @@ public class Tetris {
         }
 
         tablero = nuevo;
+    }
+
+    public String imprimirBloque(String color, boolean esGhost) {
+        if (esGhost) {
+            switch (color) {
+                case "RED":    return Color.RED + "░░" + Color.RESET;
+                case "GREEN":  return Color.GREEN + "░░" + Color.RESET;
+                case "YELLOW": return Color.YELLOW + "░░" + Color.RESET;
+                case "BLUE":   return Color.BLUE + "░░" + Color.RESET;
+                case "CYAN":   return Color.CYAN + "░░" + Color.RESET;
+                default:       return "░░";
+            }
+        } else {
+            switch (color) {
+                case "RED":    return Color.REDBG + "  " + Color.RESET;
+                case "GREEN":  return Color.GREENBG + "  " + Color.RESET;
+                case "YELLOW": return Color.YELLOWBG + "  " + Color.RESET;
+                case "BLUE":   return Color.BLUEBG + "  " + Color.RESET;
+                case "CYAN":   return Color.CYANBG + "  " + Color.RESET;
+                default:       return "▓▓";
+            }
+        }
+    }
+
+    /**
+     * Calcula la fila en que colisiona la pieza si se baja
+     */
+    public int calcularFilaDestino() {
+        int filaGhost = filaPieza;
+        
+        // Bajar hasta que colisione
+        while (!colisiona(actual.getForma(), filaGhost + 1, colPieza)) {
+            filaGhost++;
+        }
+        
+        return filaGhost;
     }
 }
