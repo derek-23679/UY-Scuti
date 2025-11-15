@@ -28,6 +28,7 @@ public class Tetris {
     private int puntaje;
     private String ultimoColorCombo;
     private int comboActual;
+    private CalculadorPuntaje calculadorPuntaje; // Nuevo: para usar árbol de frecuencias
 
     public Tetris() {
         tablero = new String[20][10];
@@ -38,6 +39,7 @@ public class Tetris {
         puntaje = 0;
         ultimoColorCombo = "";
         comboActual = 1;
+        calculadorPuntaje = new CalculadorPuntaje(); // Inicializar calculador con árbol
 
         System.out.println("Controles: A=Izq | D=Der | W=Rotar | S=Caer | Q=Salir\n");
 
@@ -99,7 +101,7 @@ public class Tetris {
 
     // Método para generar una nueva pieza
     private void generarNuevaPieza() {
-        aplicarGravedad();
+        // aplicarGravedad();
         actual = siguiente;
         siguiente = new Pieza();
         filaPieza = 0;
@@ -278,6 +280,9 @@ public class Tetris {
             }
         }
 
+        // ACTUALIZACIÓN: Actualizar árbol de frecuencias después de fijar pieza
+        calculadorPuntaje.actualizarFrecuencias(tablero);
+
         // Revisa las lineas y columnas despues de colocar una pieza 
         verificarFilas();
         verificarColumnas();
@@ -386,17 +391,12 @@ public class Tetris {
     /**
      *
      * Aumenta el puntaje segun el color dominante y combos consecutivos
+     * MODIFICADO: Ahora usa árbol de frecuencias para calcular puntaje basado en rareza
      *
      */
     private void sumarPuntaje(String color) {
-        int base = switch (color) {
-            case "RED" -> 100;
-            case "BLUE" -> 80;
-            case "YELLOW" -> 70;
-            case "GREEN" -> 60;
-            case "CYAN" -> 50;
-            default -> 40;
-        };
+        // CAMBIO: Usar calculador con árbol en lugar de valores fijos
+        int base = calculadorPuntaje.calcularPuntajePorColor(color);
 
         // Combo por color consecutivo
         if (color.equals(ultimoColorCombo)) {
