@@ -29,6 +29,7 @@ public class Tetris {
     private String ultimoColorCombo;
     private int comboActual;
     private CalculadorPuntaje calculadorPuntaje; // Nuevo: para usar árbol de frecuencias
+    private boolean cambioPuntaje;
 
     public Tetris() {
         tablero = new String[20][10];
@@ -40,6 +41,7 @@ public class Tetris {
         ultimoColorCombo = "";
         comboActual = 1;
         calculadorPuntaje = new CalculadorPuntaje(); // Inicializar calculador con árbol
+        cambioPuntaje = false;
 
         System.out.println("╔═════════════════════════════╗");
         System.out.println("║     * T  E  T  R  I  S *    ║");
@@ -55,17 +57,12 @@ public class Tetris {
             System.out.println("│ A: ← │ D: → │ W: ROTAR │ S: ↓ │ Q: Salir │");
             System.out.println("└──────────────────────────────────────────┘");
 
-            long start = System.currentTimeMillis();
             String entrada = "";
-
-            while ((System.currentTimeMillis() - start) < 800 && !sc.hasNextLine()) {
-                // Espera 800ms antes de bajar automaticamente
-            }
 
             if (sc.hasNextLine()) {
                 entrada = sc.nextLine().trim().toUpperCase();
             } else {
-                entrada = "S"; // caida automatica
+                entrada = "S"; // Bajar pieza
             }
 
             if (entrada.equals("Q")) {
@@ -73,22 +70,17 @@ public class Tetris {
                 break;
             }
 
-    if (entrada.length() == 1) {
-        char tecla = entrada.charAt(0);
+            if (entrada.length() == 1) {
+                char tecla = entrada.charAt(0);
 
-        if (tecla == 'S') {
-            caerPieza(); 
-        } 
-        else if (tecla == 'G') {
-            aplicarGravedad();
-        }
-        else {
-            moverPieza(tecla);
-        }
-    }
+                if (tecla == 'S') {
+                    caerPieza(); 
+                } else {
+                    moverPieza(tecla);
+                }
             }
-
-            sc.close();
+        }
+        sc.close();
     }
 
     // Método para caída hasta el suelo o sobre otra pieza
@@ -106,7 +98,6 @@ public class Tetris {
 
     // Método para generar una nueva pieza
     private void generarNuevaPieza() {
-        // aplicarGravedad();
         actual = siguiente;
         siguiente = new Pieza();
         filaPieza = 0;
@@ -270,12 +261,17 @@ public class Tetris {
             }
         }
 
-        // ACTUALIZACIÓN: Actualizar árbol de frecuencias después de fijar pieza
+        // Actualizar árbol de frecuencias después de fijar pieza
         calculadorPuntaje.actualizarFrecuencias(tablero);
 
         // Revisa las lineas y columnas despues de colocar una pieza 
         verificarFilas();
         verificarColumnas();
+
+        if (cambioPuntaje) {
+            aplicarGravedad();
+            cambioPuntaje = false;
+        }
     }
 
     /**
@@ -330,6 +326,7 @@ public class Tetris {
 
         tablero[fila] = java.util.Arrays.copyOf(tablero[fila - 1], tablero[fila - 1].length);
         eliminarFilaRe(fila - 1); // llamada recursiva
+        calculadorPuntaje.actualizarFrecuencias(tablero);
     }
 
     /**
@@ -376,6 +373,7 @@ public class Tetris {
         for (int k = i; k > i - 4; k--) {
             tablero[k][j] = null;
         }
+        calculadorPuntaje.actualizarFrecuencias(tablero);
     }
 
     /**
@@ -399,6 +397,8 @@ public class Tetris {
         }
 
         puntaje += base;
+        cambioPuntaje = true;
+
         System.out.println("+" + base + " puntos (color " + color + ")");
         System.out.println("Puntaje total: " + puntaje);
     }
@@ -419,78 +419,21 @@ public class Tetris {
         System.out.println();
     }
 
-    /*
-     * 
-     * Método para aplicar gravedad a los bloques "flotantes" tras eliminar una columna o fila (bloques que no están conectados a ningún otro bloque ni el suelo)
-     * 
-     * 
-    */
+    /**
+     * Gravedad de los bloques
+     */
     private void aplicarGravedad() {
-
-        int filas = tablero.length;
-        int cols  = tablero[0].length;
-
-        // Matriz para identificar bloques conectados al suelo
-        boolean[][] conectados = new boolean[filas][cols];
-
-        // BFS desde todos los bloques del suelo
-        Queue<int[]> cola = new LinkedList<>();
-
-        for (int j = 0; j < cols; j++) {
-            if (tablero[filas - 1][j] != null) {
-                conectados[filas - 1][j] = true;
-                cola.add(new int[]{filas - 1, j});
-            }
-        }
-
-        int[][] dirs = {{1,0},{-1,0},{0,1},{0,-1}}; // arriba, abajo, izquierda, derecha (direcciones en las que un bloque puede estar conectado a otro)
-
-        while (!cola.isEmpty()) {
-            int[] pos = cola.poll();
-            int r = pos[0];
-            int c = pos[1];
-
-            for (int[] d : dirs) {
-                int nr = r + d[0];
-                int nc = c + d[1];
-
-                if (nr >= 0 && nr < filas && nc >= 0 && nc < cols) {
-                    if (tablero[nr][nc] != null && !conectados[nr][nc]) {
-                        conectados[nr][nc] = true;
-                        cola.add(new int[]{nr, nc});
-                    }
+        // Revisa de abajo hacia arriba (excepto la última fila)
+        for (int i = tablero.length - 2; i >= 0; i--) {
+            for (int j = 0; j < tablero[0].length; j++) {
+                // Hay bloque y la fila de abajo está vacía
+                if (tablero[i][j] != null && tablero[i + 1][j] == null) {
+                    // Bajar bloque una posición
+                    tablero[i + 1][j] = tablero[i][j];
+                    tablero[i][j] = null;
                 }
             }
         }
-
-        String[][] nuevo = new String[filas][cols];
-
-        for (int i = 0; i < filas; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (conectados[i][j]) {
-                    nuevo[i][j] = tablero[i][j];
-                }
-            }
-        }
-
-        for (int i = filas - 1; i >= 0; i--) {
-            for (int j = 0; j < cols; j++) {
-
-                if (tablero[i][j] != null && !conectados[i][j]) {
-
-                    int r = i;
-
-                    // buscar hasta dónde puede caer
-                    while (r + 1 < filas && nuevo[r + 1][j] == null) {
-                        r++;
-                    }
-
-                    nuevo[r][j] = tablero[i][j];
-                }
-            }
-        }
-
-        tablero = nuevo;
     }
 
     public String imprimirBloque(String color, boolean esGhost) {
